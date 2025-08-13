@@ -4,7 +4,7 @@ namespace DDDPractice.Application.DTOs;
 
 public class UserDTO
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     
@@ -15,7 +15,7 @@ public class UserDTO
         SecurityCode = securityCode;
     }
 
-    public class Apapter
+    public class Adapter
     {
         
     }
