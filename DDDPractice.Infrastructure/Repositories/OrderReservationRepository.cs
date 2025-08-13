@@ -34,8 +34,9 @@ public class OrderReservationRepository : IOrderReservationRepository
         
         return order;
     }
+    
 
-    public async Task UpdataStatusAsync(StatusOrder status, Guid id)
+    public async Task UpdateStatusAsync(StatusOrder status, Guid id)
     {
         var order = await _context.OrderReservation.FindAsync(id);
         if (order == null)
@@ -48,6 +49,12 @@ public class OrderReservationRepository : IOrderReservationRepository
 
     public async Task UpdateAsync(OrderReservationEntity order)
     {
+        
+        var existingOrder = await _context.OrderReservation.FindAsync(order.Id);
+        if (existingOrder == null)
+        {
+            throw new InvalidOperationException("Reserva não encontrada.");
+        }
         _context.Update(order);
         await _context.SaveChangesAsync();
     }

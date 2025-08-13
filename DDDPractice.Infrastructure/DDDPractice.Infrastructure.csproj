@@ -11,22 +11,19 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="DDDPractice\**" />
-    <Compile Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="DDDPractice\**" />
-    <EmbeddedResource Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="DDDPractice\**" />
-    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <PropertyGroup>

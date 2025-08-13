@@ -8,7 +8,7 @@ public interface IOrderReservationRepository
 {
     Task<IEnumerable<OrderReservationEntity>> GetBySecurityCodeAsync(SecurityCode securityCode);
     Task<OrderReservationEntity> GetByIdAsync(Guid id);
-    Task UpdataStatusAsync(StatusOrder status, Guid id);
+    Task UpdateStatusAsync(StatusOrder status, Guid id);
 
     Task UpdateAsync(OrderReservationEntity order);
     Task DeleteAsync(Guid id);

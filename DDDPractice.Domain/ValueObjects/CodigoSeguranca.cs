@@ -4,6 +4,7 @@ public class SecurityCode
 {
     public string Value { get; set; }
 
+    protected SecurityCode() { }
     public SecurityCode(string value)
     {
         if (string.IsNullOrWhiteSpace(value))

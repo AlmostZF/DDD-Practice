@@ -29,6 +29,11 @@ public class ProductRepository : IProductRepository
 
     public async Task UpdateAsync(ProductEntity product)
     {
+        var existingProduct = await _context.Product.FindAsync(product.Id);
+        if (existingProduct == null)
+        {
+            throw new InvalidOperationException("Produto não encontrado.");
+        }
         _context.Update(product);
         await _context.SaveChangesAsync();
     }

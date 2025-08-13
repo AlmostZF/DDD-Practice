@@ -8,4 +8,10 @@ public class UserEntity
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public SecurityCode SecurityCode { get; private set; }
+    protected UserEntity() { }
+    public UserEntity(SecurityCode securityCode)
+    {
+        SecurityCode = securityCode;
+    }
+    
 }

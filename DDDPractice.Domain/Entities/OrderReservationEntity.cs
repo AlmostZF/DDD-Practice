@@ -8,6 +8,7 @@ namespace DDD_Practice.DDDPractice.Domain;
 public class OrderReservationEntity
 {
     public Guid Id { get; set; }
+    [NotMapped]
     public SecurityCode SecurityCode { get; set; }
     public Guid UserId { get; set; }
     public DateTime ReservationDate { get; set; }

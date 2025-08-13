@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task AddAsync(UserEntity user)
+    public async Task CreateAsync(UserEntity user)
     {
         _context.User.Add(user);
         await _context.SaveChangesAsync();
@@ -30,6 +30,11 @@ public class UserRepository : IUserRepository
 
     public async Task UpdateAsync(UserEntity user)
     {
+        var existingUser = await _context.User.FindAsync(user.Id);
+        if (existingUser == null)
+        {
+            throw new InvalidOperationException("Usuário não encontrado.");
+        }
         _context.User.Update(user);
         await _context.SaveChangesAsync();
     }
