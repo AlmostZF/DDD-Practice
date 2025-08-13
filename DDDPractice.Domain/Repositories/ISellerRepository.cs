@@ -8,5 +8,5 @@ public interface ISellerRepository
     Task AddAsync(SellerEntity seller);
     Task UpdateAsync(SellerEntity seller);
     Task DeleteAsync(Guid id);
-    Task<IEnumerator<SellerEntity>> GetAllAsync();
+    Task<IEnumerable<SellerEntity>> GetAllAsync();
 }

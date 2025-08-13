@@ -3,6 +3,7 @@ using DDD_Practice.DDDPractice.Domain.Repositories;
 using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using DDDPractice.Application.DTOs;
 using DDDPractice.Application.Interfaces;
+using DDDPractice.Application.Mappers;
 
 namespace DDDPractice.Application.Services;
 
@@ -17,13 +18,8 @@ public class UserService: IUserService
     
     public async Task<Guid> CreateAsync(UserDTO userDto)
     {
-        var securityCode = new SecurityCode(GenerateRandomCode());
-        var user = new UserEntity(securityCode)
-        {
-            Id = Guid.NewGuid(),
-            Name = userDto.Name,
-            PhoneNumber = userDto.PhoneNumber,
-        };
+        var securityCode = new SecurityCode(GenerateUniqueCodeFromGuid());
+        var user = UserMapper.ToEntity(userDto);
         
         await _userRepository.CreateAsync(user);
         return user.Id;
@@ -46,20 +42,16 @@ public class UserService: IUserService
         };
     }
 
-    public async Task<IEnumerable<UserEntity>> GetAllAsync()
+    public async Task<List<UserDTO>> GetAllAsync()
     {
-        return await _userRepository.GetAllAsync();
+        var listUser = await _userRepository.GetAllAsync();
+        return UserMapper.ToDtoList(listUser);
     }
 
 
     public async Task UpdateAsync(UserDTO userDto)
     {
-        var userEntity = new UserEntity(userDto.SecurityCode)
-        {
-            Id = userDto.Id,
-            Name = userDto.PhoneNumber,
-            PhoneNumber = userDto.PhoneNumber
-        };
+        var userEntity = UserMapper.ToEntity(userDto);
         await _userRepository.UpdateAsync(userEntity);
         
     }
@@ -69,9 +61,8 @@ public class UserService: IUserService
         await _userRepository.DeleteAsync(id);
     }
 
-    private string GenerateRandomCode()
+    private string GenerateUniqueCodeFromGuid(int length = 4)
     {
-        var random = new Random();
-        return random.Next(1000, 9999).ToString();
+        return Guid.NewGuid().ToString("N").Substring(0, length);
     }
 }

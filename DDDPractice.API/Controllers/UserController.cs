@@ -23,7 +23,7 @@ public class UserController: ControllerBase
         try
         {
             var users = await _userService.GetAllAsync();
-            var result = Result<IEnumerable<UserEntity>>.Success(users, 200);
+            var result = Result<List<UserDTO>>.Success(users, 200);
             return StatusCode(result.StatusCode, result);
         }
         catch (Exception e)

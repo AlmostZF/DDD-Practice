@@ -19,7 +19,10 @@ public class OrderReservationRepository : IOrderReservationRepository
     {
         return await _context.OrderReservation
             .Where(o => o.SecurityCode == SecurityCode)
-            .Include(o => o.User)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Seller)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Product)
             .ToListAsync();
     }
 
@@ -27,6 +30,10 @@ public class OrderReservationRepository : IOrderReservationRepository
     {
         var order = await _context.OrderReservation
             .Include(o => o.User)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Seller)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync(o => o.Id == id);
         
         if (order == null)
@@ -81,6 +88,10 @@ public class OrderReservationRepository : IOrderReservationRepository
         return await _context.OrderReservation
             .Where(o => o.OrderStatus == status)
             .Include(o => o.User)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Seller)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Product)
             .ToListAsync();
     }
 
@@ -88,6 +99,10 @@ public class OrderReservationRepository : IOrderReservationRepository
     {
         return await _context.OrderReservation
             .Include(o => o.User)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Seller.Name)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(i => i.Product.Name)
             .ToListAsync();
     }
 }

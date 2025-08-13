@@ -49,9 +49,8 @@ public class SellerRepository: ISellerRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerator<SellerEntity>> GetAllAsync()
+    public async Task<IEnumerable<SellerEntity>> GetAllAsync()
     {
-        var listSeller = await _context.Seller.ToListAsync();
-        return listSeller.GetEnumerator();
+        return await _context.Seller.ToListAsync();
     }
 }

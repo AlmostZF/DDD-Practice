@@ -1,5 +1,7 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
+using DDDPractice.Application.DTOs;
 using DDDPractice.Application.Interfaces;
+using DDDPractice.Application.Mappers;
 using DDDPractice.Application.Shared;
 
 namespace DDDPractice.Application.UseCases;
@@ -13,17 +15,17 @@ public class GetAllUserUseCase
         _userService = userService;
     }
 
-    public async Task<Result<IEnumerable<UserEntity>>> ExecuteAsync()
+    public async Task<Result<List<UserDTO>>> ExecuteAsync()
     {
         try
         {
-            var UserList = await _userService.GetAllAsync();
-
-            return Result<IEnumerable<UserEntity>>.Success(UserList);
+            var userList = await _userService.GetAllAsync();
+                
+            return Result<List<UserDTO>>.Success(userList);
         }
         catch (Exception e)
         {
-            return Result<IEnumerable<UserEntity>>.Failure("Erro ao buscar usuários", 500);
+            return Result<List<UserDTO>>.Failure("Erro ao buscar usuários", 500);
         }
     }
 }

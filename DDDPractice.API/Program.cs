@@ -16,8 +16,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddControllers();
 
-// Servicies
+// Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderReservationService, IOrderReservationService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<IStockService, StockService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

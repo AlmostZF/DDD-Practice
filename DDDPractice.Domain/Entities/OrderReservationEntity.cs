@@ -18,8 +18,12 @@ public class OrderReservationEntity
     public decimal ReservationFee { get; set; }
     public StatusOrder OrderStatus { get; set; }
     public decimal ValueTotal { get; set; }
+
+    public ICollection<OrderReservationItemEntity> ListOrderItems { get; set; } = new List<OrderReservationItemEntity>();
     
-    
+
+
+
     [ForeignKey(nameof(SecurityCode))]
     public UserEntity User { get; set; }
 }

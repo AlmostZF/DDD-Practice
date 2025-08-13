@@ -9,4 +9,8 @@ public class OrderReservationItemDTO
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }
+
+    public ProductDTO Product { get; set; }
+
+    public SellerDTO SellerDto { get; set; }
 }

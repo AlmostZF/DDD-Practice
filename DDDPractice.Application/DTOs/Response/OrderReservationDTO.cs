@@ -15,5 +15,9 @@ public class OrderReservationDTO
     public decimal ReservationFee { get; set; }
     public StatusOrder OrderStatus { get; set; }
     public decimal ValueTotal { get; set; }
+    
+    public IEnumerable<OrderReservationItemDTO> listOrderItens { get; set; }
+
+    public UserDTO User { get; set; }
 
 }

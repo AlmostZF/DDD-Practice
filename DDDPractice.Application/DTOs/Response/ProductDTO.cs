@@ -8,4 +8,5 @@ public class ProductDTO
     public ProductType ProductType { get; set; }
     public decimal UnitPrice { get; set; }
     public int TotalQuantity { get; set; }
+    public SellerDTO Seller { get; set; }
 }
