@@ -7,19 +7,13 @@ public class SellerMapper
 {
     public static SellerDTO ToDto(SellerEntity sellerEntity)
     {
-        if (sellerEntity == null) return new SellerDTO();
+        if (sellerEntity == null) return new SellerDTO(null);
         
-        return new SellerDTO
+        return new SellerDTO(sellerEntity.PickupLocation)
         {
             Id = sellerEntity.Id,
             Name = sellerEntity.Name ,
             PhoneNumber = sellerEntity.PhoneNumber,
-            PickupLocation = 
-            {  
-                City  = sellerEntity.PickupLocation.City, 
-                State = sellerEntity.PickupLocation.State, 
-                Street = sellerEntity.PickupLocation.Street
-            }
         };
 
     }
@@ -32,16 +26,13 @@ public class SellerMapper
 
     public static SellerEntity ToEntity(SellerDTO sellerDto)
     {
-        if (sellerDto == null) return new SellerEntity();
+        if (sellerDto == null) return new SellerEntity(null);
         
-        return new SellerEntity
+        return new SellerEntity(sellerDto.PickupLocation)
         {
             Id = sellerDto.Id,
             Name = sellerDto.Name ,
             PhoneNumber = sellerDto.PhoneNumber,
-            PickupLocation = { City  = sellerDto.PickupLocation.City, 
-                State = sellerDto.PickupLocation.State, 
-                Street = sellerDto.PickupLocation.Street}
         };
     }
     

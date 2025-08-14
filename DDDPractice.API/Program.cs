@@ -7,6 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderReservationService, OrderReservationService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<SellerService>(); // Adicionado!
+builder.Services.AddScoped<IStockService, StockService>();
+
 // Repositories
 builder.Services.AddScoped<IOrderReservationRepository, OrderReservationRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -15,13 +23,6 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddControllers();
-
-// Services
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IOrderReservationService, IOrderReservationService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ISellerService, SellerService>();
-builder.Services.AddScoped<IStockService, StockService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

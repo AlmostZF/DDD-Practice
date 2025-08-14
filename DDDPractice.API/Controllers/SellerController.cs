@@ -1,4 +1,5 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Services;
 using DDDPractice.Application.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,14 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class SellerController: ControllerBase
 {
-    private readonly SellerService _sellerService;
+    private readonly ISellerService _sellerService;
 
-    public SellerController(SellerService sellerService)
+    public SellerController(ISellerService sellerService)
     {
         _sellerService = sellerService;
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> getById([FromRoute] Guid id)
     {
         try
@@ -93,7 +94,7 @@ public class SellerController: ControllerBase
         }
         catch (Exception e)
         {   
-            var result = Result.Failure("Erro ao buscar vendedor", 500);
+            var result = Result.Failure("Erro ao editar vendedor", 500);
             return StatusCode(result.StatusCode, result);
         } 
     }

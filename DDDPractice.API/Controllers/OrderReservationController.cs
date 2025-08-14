@@ -7,7 +7,7 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class OrderReservationController: ControllerBase
 {
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get()
     {
         try

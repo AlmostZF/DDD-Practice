@@ -8,4 +8,9 @@ public class SellerDTO
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public PickupLocation PickupLocation { get; private set; }
+    
+    public SellerDTO(PickupLocation pickupLocation)
+    {
+        PickupLocation = pickupLocation;
+    }
 }

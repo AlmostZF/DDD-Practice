@@ -8,4 +8,9 @@ public class SellerEntity
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public PickupLocation PickupLocation { get; private set; }
+    protected SellerEntity() { }
+    public SellerEntity(PickupLocation pickupLocation)
+    {
+        PickupLocation = pickupLocation;
+    }
 }

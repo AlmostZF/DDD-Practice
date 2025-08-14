@@ -33,7 +33,7 @@ public class StockController: ControllerBase
     }
     
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         try
