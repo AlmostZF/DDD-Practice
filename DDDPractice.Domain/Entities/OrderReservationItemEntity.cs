@@ -17,5 +17,5 @@ public class OrderReservationItemEntity
     public SellerEntity Seller { get; set; }
     
     [ForeignKey(nameof(ReservationId))]
-    public OrderReservationEntity Reservarion { get; set; }
+    public OrderReservationEntity Reservation { get; set; }
 }

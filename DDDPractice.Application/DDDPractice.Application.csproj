@@ -18,10 +18,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\OrderReservarionItem\" />
-    <Folder Include="UseCases\OrderReservation\" />
-    <Folder Include="UseCases\Product\" />
-    <Folder Include="UseCases\Seller\" />
-    <Folder Include="UseCases\Stock\" />
   </ItemGroup>
 
   <PropertyGroup>

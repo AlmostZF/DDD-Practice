@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<SellerEntity> Seller { get; set; }
     public DbSet<StockEntity> Stock { get; set; }
     public DbSet<UserEntity> User { get; set; }
+    
     public DbSet<OrderReservationItemEntity> OrderReservationItem { get; set; }
     public DbSet<OrderReservationEntity> OrderReservation { get; set; }
 

@@ -1,4 +1,3 @@
-using DDD_Practice.DDDPractice.Domain.Entities;
 using DDDPractice.Application.DTOs;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Shared;
