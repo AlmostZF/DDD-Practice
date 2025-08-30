@@ -8,15 +8,11 @@ public class UserDTO
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     
-    public SecurityCode SecurityCode { get; private set; }
+    public SecurityCode? SecurityCode { get; private set; }
     
     public UserDTO(SecurityCode securityCode)
     {
         SecurityCode = securityCode;
     }
-
-    public class Adapter
-    {
-        
-    }
+    
 }
