@@ -17,7 +17,7 @@ public class DeleteProductUseCase
         try
         {
             await _productService.DeleteAsync(id);
-            return Result.Success(200);
+            return Result.Success("Produto deletado com sucesso",200);
         }
         catch (Exception e)
         {

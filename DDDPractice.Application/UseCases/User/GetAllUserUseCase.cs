@@ -15,17 +15,17 @@ public class GetAllUserUseCase
         _userService = userService;
     }
 
-    public async Task<Result<List<UserDTO>>> ExecuteAsync()
+    public async Task<Result<List<UserResponseDTO>>> ExecuteAsync()
     {
         try
         {
             var userList = await _userService.GetAllAsync();
                 
-            return Result<List<UserDTO>>.Success(userList);
+            return Result<List<UserResponseDTO>>.Success(userList);
         }
         catch (Exception e)
         {
-            return Result<List<UserDTO>>.Failure("Erro ao buscar usuários", 500);
+            return Result<List<UserResponseDTO>>.Failure("Erro ao buscar usuários", 500);
         }
     }
 }

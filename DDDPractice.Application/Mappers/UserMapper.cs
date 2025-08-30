@@ -1,15 +1,17 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
+using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
 namespace DDDPractice.Application.Mappers;
 
 public static class UserMapper
 {
-    public static UserDTO ToDto(UserEntity userEntity)
+    public static UserResponseDTO ToDto(UserEntity userEntity)
     {
-        if (userEntity == null) return new UserDTO(null);
+        if (userEntity == null) return new UserResponseDTO(null);
         
-        return new UserDTO(userEntity.SecurityCode)
+        return new UserResponseDTO(userEntity.SecurityCode)
         {
             Id = userEntity.Id,
             Name = userEntity.Name,
@@ -18,29 +20,58 @@ public static class UserMapper
 
     }
 
-    public static List<UserDTO> ToDtoList(IEnumerable<UserEntity> userEntity)
+
+
+    public static List<UserResponseDTO> ToDtoList(IEnumerable<UserEntity> userEntity)
     {
         return userEntity.Select(ToDto).ToList();
     }
 
 
-    public static UserEntity ToEntity(UserDTO userDto)
+    public static UserEntity ToEntity(UserResponseDTO userResponseDto)
     {
-        if (userDto == null) return new UserEntity(null);
+        var securityCode = new SecurityCode(GenerateUniqueCodeFromGuid());
+        if (userResponseDto == null) return new UserEntity(null);
         
-        return new UserEntity(userDto.SecurityCode)
+        return new UserEntity(securityCode)
         {
-            Id = userDto.Id!.Value,
-            Name = userDto.Name,
-            PhoneNumber = userDto.PhoneNumber
+            Id = userResponseDto.Id ?? Guid.NewGuid(),
+            Name = userResponseDto.Name,
+            PhoneNumber = userResponseDto.PhoneNumber
+        }; 
+    }
+    public static void ToUpdateEntity(UserEntity userEntity, UserUpdateDTO userUpdateDto)
+    {
+        if (userUpdateDto == null) return;
+
+        {
+            userEntity.Id = userUpdateDto.Id;
+            userEntity.Name = userUpdateDto.Name;
+            userEntity.PhoneNumber = userUpdateDto.PhoneNumber;
+        };
+    }
+    
+    public static UserEntity ToCreateEntity(UserCreateDTO userCreateDto)
+    {
+        var securityCode = new SecurityCode(GenerateUniqueCodeFromGuid());
+        if (userCreateDto == null) return new UserEntity(null);
+        
+        return new UserEntity(securityCode)
+        {
+            Id = Guid.NewGuid(),
+            Name = userCreateDto.Name,
+            PhoneNumber = userCreateDto.PhoneNumber
         }; 
     }
     
-    public static List<UserEntity> ToEntitylist(List<UserDTO> userDto)
+    public static List<UserEntity> ToEntitylist(List<UserResponseDTO> userDto)
     {
         return userDto.Select(ToEntity).ToList();
     }
 
-    
+    private static string GenerateUniqueCodeFromGuid(int length = 4)
+    {
+        return Guid.NewGuid().ToString("N").Substring(0, length);
+    }
     
 }

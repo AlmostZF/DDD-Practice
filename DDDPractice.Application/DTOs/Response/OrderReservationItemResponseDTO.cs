@@ -1,6 +1,6 @@
 namespace DDDPractice.Application.DTOs;
 
-public class OrderReservationItemDTO
+public class OrderReservationItemResponseDTO
 {
     public Guid? Id { get; set; }
     public Guid ReservationId { get; set; }

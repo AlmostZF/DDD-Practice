@@ -12,16 +12,16 @@ public class GetAllProductUseCase
     {
         _productService = productService;
     }
-    public async Task<Result<List<ProductDTO>>> ExecuteAsync()
+    public async Task<Result<List<ProductResponseDTO>>> ExecuteAsync()
     {
         try
         {
             var productDto = await _productService.GetAllAsync();
-            return Result<List<ProductDTO>>.Success(productDto,200);
+            return Result<List<ProductResponseDTO>>.Success(productDto,200);
         }
         catch (Exception e)
         {
-            return Result<List<ProductDTO>>.Failure("Erro ao buscar todos produtos", 500);
+            return Result<List<ProductResponseDTO>>.Failure("Erro ao buscar todos produtos", 500);
         }
     }
 }

@@ -1,3 +1,4 @@
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Shared;
 
@@ -12,12 +13,12 @@ public class UpdateQuantityUseCase
         _stockService = stockService;
     }
 
-    public async Task<Result> ExecuteAsync(Guid productId, int newQuantity)
+    public async Task<Result> ExecuteAsync(StockUpdateDTO stockUpdateDto)
     {
         try
         {
-            await _stockService.UpdateQuantityAsync(productId, newQuantity);
-            return Result.Success(200);
+            await _stockService.UpdateQuantityAsync(stockUpdateDto);
+            return Result.Success("Stock atualizado com sucesso",200);
         }
         catch (Exception e)
         {

@@ -1,5 +1,6 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Shared;
 
@@ -14,13 +15,13 @@ public class UpdateUserUseCase
         _userService = userService;
     }
 
-    public async Task<Result> ExecuteAsync(UserDTO userDto)
+    public async Task<Result> ExecuteAsync(UserUpdateDTO userUpdateDTO)
     {
         try
         {
-            await _userService.UpdateAsync(userDto);
+            await _userService.UpdateAsync(userUpdateDTO);
 
-            return Result.Success(200);
+            return Result.Success("Usuário atualizado com sucesso", 200);
         }
         catch (Exception e)
         {

@@ -6,11 +6,11 @@ namespace DDDPractice.Application.Mappers;
 
 public static class OrderReservationItemMapper
 {
-    public static OrderReservationItemDTO ToDto(OrderReservationItemEntity orderReservationItemEntity)
+    public static OrderReservationItemResponseDTO ToDto(OrderReservationItemEntity orderReservationItemEntity)
     {
-        if (orderReservationItemEntity == null) return new OrderReservationItemDTO();
+        if (orderReservationItemEntity == null) return new OrderReservationItemResponseDTO();
         
-        return new OrderReservationItemDTO
+        return new OrderReservationItemResponseDTO
         {
             Id = orderReservationItemEntity.Id,
             Quantity = orderReservationItemEntity.Quantity,
@@ -19,35 +19,35 @@ public static class OrderReservationItemMapper
             SellerId = orderReservationItemEntity.SellerId,
             TotalPrice = orderReservationItemEntity.TotalPrice,
             UnitPrice = orderReservationItemEntity.UnitPrice,
-            Product = ProductMapper.ToDto(orderReservationItemEntity.Product),
-            SellerDto = SellerMapper.ToDto(orderReservationItemEntity.Seller)
+            ProductResponse = ProductMapper.ToDto(orderReservationItemEntity.Product),
+            SellerResponseDto = SellerMapper.ToDto(orderReservationItemEntity.Seller)
         };
 
     }
 
-    public static List<OrderReservationItemDTO> ToDtoList(IEnumerable<OrderReservationItemEntity> orderReservationItemEntity)
+    public static List<OrderReservationItemResponseDTO> ToDtoList(IEnumerable<OrderReservationItemEntity> orderReservationItemEntity)
     {
         return orderReservationItemEntity.Select(ToDto).ToList();
     }
 
 
-    public static OrderReservationItemEntity ToEntity(OrderReservationItemDTO orderReservationDto)
+    public static OrderReservationItemEntity ToEntity(OrderReservationItemResponseDTO orderReservationResponseDto)
     {
-        if (orderReservationDto == null) return new OrderReservationItemEntity();
+        if (orderReservationResponseDto == null) return new OrderReservationItemEntity();
         
         return new OrderReservationItemEntity
         {
-            Id = orderReservationDto.Id,
-            Quantity = orderReservationDto.Quantity,
-            ProductId = orderReservationDto.ProductId,
-            ReservationId = orderReservationDto.ReservationId,
-            SellerId = orderReservationDto.SellerId,
-            TotalPrice = orderReservationDto.TotalPrice,
-            UnitPrice = orderReservationDto.UnitPrice
+            Id = orderReservationResponseDto.Id ?? Guid.NewGuid(),
+            Quantity = orderReservationResponseDto.Quantity,
+            ProductId = orderReservationResponseDto.ProductId,
+            ReservationId = orderReservationResponseDto.ReservationId!,
+            SellerId = orderReservationResponseDto.SellerId,
+            TotalPrice = orderReservationResponseDto.TotalPrice,
+            UnitPrice = orderReservationResponseDto.UnitPrice
         };
     }
     
-    public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemDTO> orderReservationDto)
+    public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemResponseDTO> orderReservationDto)
     {
         return orderReservationDto.Select(ToEntity).ToList();
     }

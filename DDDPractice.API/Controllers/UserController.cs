@@ -1,6 +1,5 @@
-using DDDPractice.Application.DTOs;
-using DDDPractice.Application.Interfaces;
-using DDDPractice.Application.Shared;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
+using DDDPractice.Application.UseCases;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDPractice.API.Controllers;
@@ -9,90 +8,76 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class UserController: ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly CreateUserUseCase _createUserUseCase;
+    private readonly UpdateUserUseCase _updateUserUseCase;
+    private readonly DeleteUserUseCase _deleteUserUseCase;
+    private readonly GetAllUserUseCase _getAllUserUseCase;
+    private readonly GetUserUserCase _getUserUseCase;
+    
 
-    public UserController(IUserService userService)
+    public UserController(
+        CreateUserUseCase createUserUseCase,
+        DeleteUserUseCase deleteUserUseCase,
+        GetAllUserUseCase getAllUserUseCase,
+        GetUserUserCase getUserUseCase,
+        UpdateUserUseCase updateUserUseCase
+        )
     {
-        _userService = userService;
+        _createUserUseCase = createUserUseCase;
+        _updateUserUseCase = updateUserUseCase;
+        _deleteUserUseCase = deleteUserUseCase;
+        _getAllUserUseCase = getAllUserUseCase;
+        _getUserUseCase = getUserUseCase;
     }
     
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            var users = await _userService.GetAllAsync();
-            var result = Result<List<UserDTO>>.Success(users, 200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar usuarios", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _getAllUserUseCase.ExecuteAsync();
+        
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        try
-        {
-            var user = await _userService.GetByIdAsync(id);
-            var result = Result<UserDTO>.Success(user, 200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {
-            var result = Result.Failure("Erro ao buscar usuário", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _getUserUseCase.ExecuteAsync(id);
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDto)
+    public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDTO userUpdateDto)
     {
-        try
-        {
-            await _userService.UpdateAsync(userDto);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, "Usuário atualizado com sucesso");
-        }
-        catch (Exception e)
-        {
-            var result = Result.Failure("Erro ao atualizado usuário", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _updateUserUseCase.ExecuteAsync(userUpdateDto);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDTO userDto)
+    public async Task<IActionResult> CreateUser([FromBody] UserCreateDTO userCreateDto)
     {
-        try
-        {
-            var guid = await _userService.CreateAsync(userDto);
-            var result = Result<Guid>.Success(guid, 201);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {
-            var result = Result.Failure("Erro ao crear usuário", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _createUserUseCase.ExecuteAsync(userCreateDto);
+
+        return result.Value != null
+            ? Created()
+            : BadRequest(result.Error);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
     {
-        try
-        {
-            await _userService.DeleteAsync(id);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, "Usuário deletado");
-        }
-        catch (Exception e)
-        {
-            var result = Result.Failure("Erro ao deletar usuário", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+
+        var result = await _deleteUserUseCase.ExecuteAsync(id);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
 }

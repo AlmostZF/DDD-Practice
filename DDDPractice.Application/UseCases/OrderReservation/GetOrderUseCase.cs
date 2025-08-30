@@ -13,16 +13,16 @@ public class GetOrderUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<OrderReservationDTO>> ExecuteAsync(Guid id)
+    public async Task<Result<OrderReservationResponseDTO>> ExecuteAsync(Guid id)
     {
         try
         {
            var orderReservationDto = await _orderReservationService.GetByIdAsync(id);
-            return Result<OrderReservationDTO>.Success(orderReservationDto,200);
+            return Result<OrderReservationResponseDTO>.Success(orderReservationDto,200);
         }
         catch (Exception e)
         {
-            return Result<OrderReservationDTO>.Failure("Erro ao criar lista de compra", 500);
+            return Result<OrderReservationResponseDTO>.Failure("Erro ao criar lista de compra", 500);
         }
     }
 }

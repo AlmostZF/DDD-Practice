@@ -17,26 +17,26 @@ public class OrderReservationService : IOrderReservationService
         _orderReservationRepository = orderReservationRepository;
     }
 
-    public async Task<List<OrderReservationDTO>> GetBySecurityCodeAsync(SecurityCode securityCode)
+    public async Task<List<OrderReservationResponseDTO>> GetBySecurityCodeAsync(SecurityCode securityCode)
     {
         var listOrder= await _orderReservationRepository.GetBySecurityCodeAsync(securityCode);
         return OrderReservationMapper.ToDtoList(listOrder);
     }
 
-    public async Task<OrderReservationDTO> GetByIdAsync(Guid id)
+    public async Task<OrderReservationResponseDTO> GetByIdAsync(Guid id)
     {
         var orderReservation = await _orderReservationRepository.GetByIdAsync(id);
         return OrderReservationMapper.ToDto(orderReservation);
     }
 
-    public async Task UpdateStatusAsync(OrderReservationDTO orderReservationDto, Guid id)
+    public async Task UpdateStatusAsync(OrderReservationResponseDTO orderReservationResponseDto, Guid id)
     {
-       await _orderReservationRepository.UpdateStatusAsync(orderReservationDto.OrderStatus, id);
+       await _orderReservationRepository.UpdateStatusAsync(orderReservationResponseDto.OrderStatus, id);
     }
 
-    public async Task UpdateAsync(OrderReservationDTO orderReservationDto)
+    public async Task UpdateAsync(OrderReservationResponseDTO orderReservationResponseDto)
     {
-        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationDto);
+        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationResponseDto);
         await _orderReservationRepository.UpdateAsync(orderReservationEntity);
     }
 
@@ -45,19 +45,19 @@ public class OrderReservationService : IOrderReservationService
        await _orderReservationRepository.DeleteAsync(id);
     }
 
-    public async Task AddAsync(OrderReservationDTO orderReservationDto)
+    public async Task AddAsync(OrderReservationResponseDTO orderReservationResponseDto)
     {
-        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationDto);
+        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationResponseDto);
         await _orderReservationRepository.AddAsync(orderReservationEntity);
     }
 
-    public async Task<List<OrderReservationDTO>> GetByStatusAsync(StatusOrder status)
+    public async Task<List<OrderReservationResponseDTO>> GetByStatusAsync(StatusOrder status)
     {
         var orderReservationEntities = await _orderReservationRepository.GetByStatusAsync(status);
         return OrderReservationMapper.ToDtoList(orderReservationEntities);
     }
 
-    public async Task<List<OrderReservationDTO>> GetAllAsync()
+    public async Task<List<OrderReservationResponseDTO>> GetAllAsync()
     {
         var orderReservationEntities = await _orderReservationRepository.GetAllAsync();
         return OrderReservationMapper.ToDtoList(orderReservationEntities);

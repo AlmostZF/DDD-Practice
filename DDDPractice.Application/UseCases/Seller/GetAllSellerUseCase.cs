@@ -13,16 +13,16 @@ public class GetAllSellerUseCase
         _sellerService = sellerService;
     }
     
-    public async Task<Result<List<SellerDTO>>> ExecuteAsync()
+    public async Task<Result<List<SellerResponseDTO>>> ExecuteAsync()
     {
         try
         {
             var listSellerDto = await _sellerService.GetAllAsync();
-            return Result<List<SellerDTO>>.Success(listSellerDto,200);
+            return Result<List<SellerResponseDTO>>.Success(listSellerDto,200);
         }
         catch (Exception e)
         {
-            return Result<List<SellerDTO>>.Failure("Erro ao buscar vendedores", 500);
+            return Result<List<SellerResponseDTO>>.Failure("Erro ao buscar vendedores", 500);
         }
     }
 }

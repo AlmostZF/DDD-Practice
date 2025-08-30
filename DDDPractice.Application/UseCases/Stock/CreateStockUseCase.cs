@@ -1,4 +1,5 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Shared;
 
@@ -14,12 +15,12 @@ public class CreateStockUseCase
         _stockService = stockService;
     }
 
-    public async Task<Result> ExecuteAsync(StockDTO stock)
+    public async Task<Result> ExecuteAsync(StockCreateDTO stockCreate)
     {
         try
         {
-            _stockService.AddAsync(stock);
-            return Result.Success(200);
+            await _stockService.AddAsync(stockCreate);
+            return Result.Success("Stock criado com sucesso",200);
         }
         catch (Exception e)
         {

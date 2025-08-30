@@ -13,16 +13,16 @@ public class GetUserUserCase
         _userService = userService;
     }
 
-    public async Task<Result<UserDTO>> ExecuteAsync(Guid id)
+    public async Task<Result<UserResponseDTO>> ExecuteAsync(Guid id)
     {
         try
         {
-            var User = await _userService.GetByIdAsync(id);
-            return Result<UserDTO>.Success(User);
+            var user = await _userService.GetByIdAsync(id);
+            return Result<UserResponseDTO>.Success(user);
         }
         catch (Exception e)
         {
-            return Result<UserDTO>.Failure("Erro ao buscar usuário", 500);
+            return Result<UserResponseDTO>.Failure("Erro ao buscar usuário", 500);
         }
     }
 }

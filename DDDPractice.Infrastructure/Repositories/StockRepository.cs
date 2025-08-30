@@ -1,5 +1,7 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
 using DDD_Practice.DDDPractice.Domain.Repositories;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
+using DDDPractice.Application.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DDD_Practice.DDDPractice.Infrastructure.Repositories;
@@ -16,28 +18,38 @@ public class StockRepository : IStockRepository
     public async Task<IEnumerable<StockEntity>> GetAllAsync()
     {
         return await _context.Stock
+            .Include(s=>s.Product)
+            .ThenInclude(p=> p.Seller)
             .ToListAsync();
     }
 
-    public async Task<StockEntity> GetByProductIdAsync(Guid productId)
+    public async Task<StockEntity?> GetByProductIdAsync(Guid productId)
     {
         var stock = await _context.Stock
             .Include(s => s.Product)
+            .ThenInclude(p=> p.Seller)
             .FirstOrDefaultAsync(s => s.ProductId == productId);
-
-        if (stock == null)
-            throw new Exception("Stock not found.");
 
         return stock;
     }
 
-    public async Task UpdateQuantityAsync(Guid productId, int newQuantity)
+    public async Task<StockEntity> GetByIdAsync(Guid stockId)
     {
-        var stock = await _context.Stock.FindAsync(productId);
+        var stock = await _context.Stock
+            .Include(s => s.Product)
+            .ThenInclude(p=> p.Seller)
+            .FirstOrDefaultAsync(s => s.Id == stockId);
+        
         if (stock == null)
             throw new Exception("Stock not found.");
 
-        stock.Quantity = newQuantity;
+
+        return stock;
+    }
+
+    public async Task UpdateQuantityAsync(StockEntity stockEntity)
+    {
+        _context.Stock.Update(stockEntity);
         await _context.SaveChangesAsync();
 
     }

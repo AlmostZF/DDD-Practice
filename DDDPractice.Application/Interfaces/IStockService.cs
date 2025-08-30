@@ -1,13 +1,14 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
 namespace DDDPractice.Application.Interfaces;
 
 public interface IStockService
 {
-    Task<List<StockDTO>> GetAllAsync();
-    Task<StockDTO> GetByProductIdAsync(Guid productId);
-    Task UpdateQuantityAsync(Guid productId, int newQuantity);
-    Task AddAsync(StockDTO stock);
+    Task<List<StockResponseDTO>> GetAllAsync();
+    Task<StockResponseDTO> GetByIdAsync(Guid productId);
+    Task UpdateQuantityAsync(StockUpdateDTO stockUpdateDto);
+    Task AddAsync(StockCreateDTO stockCreateDTO);
 
 }

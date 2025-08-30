@@ -13,16 +13,16 @@ public class GetAllStockUseCase
         _stockService = stockService;
     }
     
-    public async Task<Result<List<StockDTO>>> ExecuteAsync()
+    public async Task<Result<List<StockResponseDTO>>> ExecuteAsync()
     {
         try
         {
             var listStockDTO = await _stockService.GetAllAsync();
-            return Result<List<StockDTO>>.Success(listStockDTO,200);
+            return Result<List<StockResponseDTO>>.Success(listStockDTO,200);
         }
         catch (Exception e)
         {
-            return Result<List<StockDTO>>.Failure("Erro ao buscar estoque", 500);
+            return Result<List<StockResponseDTO>>.Failure("Erro ao buscar estoque", 500);
         }
         
     }

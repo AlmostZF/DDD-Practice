@@ -12,16 +12,16 @@ public class GetProductUseCase
     {
         _productService = productService;
     }
-    public async Task<Result<ProductDTO>> ExecuteAsync(Guid id)
+    public async Task<Result<ProductResponseDTO>> ExecuteAsync(Guid id)
     {
         try
         {
             var productDto = await _productService.GetByIdAsync(id);
-            return Result<ProductDTO>.Success(productDto,200);
+            return Result<ProductResponseDTO>.Success(productDto,200);
         }
         catch (Exception e)
         {
-            return Result<ProductDTO>.Failure("Erro ao buscar produto", 500);
+            return Result<ProductResponseDTO>.Failure("Erro ao buscar produto", 500);
         }
     }
 }

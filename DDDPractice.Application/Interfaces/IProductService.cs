@@ -1,12 +1,13 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
 namespace DDDPractice.Application.Interfaces;
 
 public interface IProductService
 {
-    Task<ProductDTO> GetByIdAsync(Guid id);
-    Task UpdateAsync (ProductDTO product);
+    Task<ProductResponseDTO> GetByIdAsync(Guid id);
+    Task UpdateAsync (ProductUpdateDTO productUpdate);
     Task DeleteAsync(Guid id);
-    Task AddAsync(ProductDTO product);
-    Task<List<ProductDTO>> GetAllAsync();
+    Task<Guid> AddAsync(ProductCreateDTO productCreateDTO);
+    Task<List<ProductResponseDTO>> GetAllAsync();
 }

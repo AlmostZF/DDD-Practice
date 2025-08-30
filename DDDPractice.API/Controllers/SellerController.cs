@@ -1,7 +1,9 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Services;
 using DDDPractice.Application.Shared;
+using DDDPractice.Application.UseCases.Seller;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDPractice.API.Controllers;
@@ -10,92 +12,77 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class SellerController: ControllerBase
 {
-    private readonly ISellerService _sellerService;
+    private readonly CreateSellerUseCase _createSellerUseCase;
+    private readonly GetAllSellerUseCase _getAllSellerUseCase;
+    private readonly GetSellerUseCase _getSellerUseCase;
+    private readonly DeleteSellerUseCase _deleteSellerUseCase;
+    private readonly UpdateSellerUseCase _updateSellerUseCase;
+    
 
-    public SellerController(ISellerService sellerService)
+    public SellerController(
+        CreateSellerUseCase createSellerUseCase,
+        GetAllSellerUseCase getAllSellerUseCase,
+        DeleteSellerUseCase deleteSellerUseCase,
+        UpdateSellerUseCase updateSellerUseCase,
+        GetSellerUseCase getSellerUseCase
+        )
     {
-        _sellerService = sellerService;
+        _createSellerUseCase = createSellerUseCase;
+        _getAllSellerUseCase = getAllSellerUseCase;
+        _deleteSellerUseCase = deleteSellerUseCase;
+        _updateSellerUseCase = updateSellerUseCase;
+        _getSellerUseCase = getSellerUseCase;
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> getById([FromRoute] Guid id)
     {
-        try
-        {
-            var sellerDto = await _sellerService.GetByIdAsync(id);
-            var result = Result<SellerDTO>.Success(sellerDto,200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar vendedor", 500);
-            return StatusCode(result.StatusCode, result);
-        }  
-        
+        var result = await _getSellerUseCase.ExecuteAsync(id);
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
     }
     
     [HttpGet]
     public async Task<IActionResult> getAll()
     {
-        try
-        {
-            var sellerDto = await _sellerService.GetAllAsync();
-            var result = Result<List<SellerDTO>>.Success(sellerDto,200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar vendedores", 500);
-            return StatusCode(result.StatusCode, result);
-        }  
+
+        var result = await _getAllSellerUseCase.ExecuteAsync();
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
         
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        try
-        {
-             await _sellerService.DeleteAsync(id);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar vendedor", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _deleteSellerUseCase.ExecuteAsync(id);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] SellerDTO sellerDto)
+    public async Task<IActionResult> Create([FromBody] SellerCreateDTO sellerCreateDto)
     {
-        try
-        {
-            await _sellerService.AddAsync(sellerDto);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar vendedor", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _createSellerUseCase.ExecuteAsync(sellerCreateDto);
+
+        return result.Message != null
+            ? Created()
+            : BadRequest(result.Error);    
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] SellerDTO sellerDto)
+    public async Task<IActionResult> Update([FromBody] SellerUpdateDTO sellerUpdateDto)
     {
-        try
-        {
-            await _sellerService.UpdateAsync(sellerDto);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao editar vendedor", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _updateSellerUseCase.ExecuteAsync(sellerUpdateDto);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
 }

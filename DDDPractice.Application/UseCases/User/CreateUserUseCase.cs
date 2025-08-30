@@ -1,4 +1,5 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Shared;
 
@@ -13,12 +14,12 @@ public class CreateUserUseCase
         _userService = userService;
     }
 
-    public async Task<Result<Guid>> ExecuteAsync(UserDTO dto)
+    public async Task<Result<Guid>> ExecuteAsync(UserCreateDTO userCreateDTO)
     {
         try
         {
-            var userID = await _userService.CreateAsync(dto);
-            return Result<Guid>.Success(userID);
+            var userID = await _userService.CreateAsync(userCreateDTO);
+            return Result<Guid>.Success(userID,201);
         }
         catch (Exception e)
         {

@@ -3,7 +3,7 @@ using DDD_Practice.DDDPractice.Domain.ValueObjects;
 
 namespace DDDPractice.Application.DTOs;
 
-public class OrderReservationDTO
+public class OrderReservationResponseDTO
 {
     public Guid? Id { get; set; }
     public SecurityCode? SecurityCode { get; set; }

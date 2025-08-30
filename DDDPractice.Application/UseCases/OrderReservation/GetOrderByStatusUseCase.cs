@@ -14,16 +14,16 @@ public class GetOrderByStatusUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<List<OrderReservationDTO>>> ExecuteAsync(SecurityCode securityCode)
+    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(SecurityCode securityCode)
     {
         try
         {
             var orderReservationDtos = await _orderReservationService.GetBySecurityCodeAsync(securityCode);
-            return Result<List<OrderReservationDTO>>.Success(orderReservationDtos,200);
+            return Result<List<OrderReservationResponseDTO>>.Success(orderReservationDtos,200);
         }
         catch (Exception e)
         {
-            return Result<List<OrderReservationDTO>>.Failure("Erro ao busacar lista de compra", 500);
+            return Result<List<OrderReservationResponseDTO>>.Failure("Erro ao busacar lista de compra", 500);
         }
     }
 }

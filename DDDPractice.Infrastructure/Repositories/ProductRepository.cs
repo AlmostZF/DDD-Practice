@@ -57,6 +57,7 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<ProductEntity>> GetAllAsync()
     {
         return await _context.Product
+            .Include(p=> p.Seller)
             .ToListAsync();
     }
 }

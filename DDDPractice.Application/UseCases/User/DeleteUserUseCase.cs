@@ -17,7 +17,7 @@ public class DeleteUserUseCase
         try
         {
             await _userService.DeleteAsync(id);
-            return Result.Success(200);
+            return Result.Success("Usuário deletado com sucesso",200);
         }
         catch (Exception e)
         {

@@ -9,9 +9,8 @@ public class ProductEntity
     public string Name { get; set; }
     public ProductType ProductType { get; set; }
     public decimal UnitPrice { get; set; }
-    public int TotalQuantity { get; set; }
     public Guid SellerId { get; set; }
     
     [ForeignKey(nameof(SellerId))]
-    public SellerEntity Seller { get; set; }
+    public SellerEntity? Seller { get; set; }
 }

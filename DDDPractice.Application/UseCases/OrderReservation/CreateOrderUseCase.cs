@@ -13,12 +13,12 @@ public class CreateOrderUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result> ExecuteAsync(OrderReservationDTO orderReservationDto)
+    public async Task<Result> ExecuteAsync(OrderReservationResponseDTO orderReservationResponseDto)
     {
         try
         {
-            await _orderReservationService.AddAsync(orderReservationDto);
-            return Result.Success(200);
+            await _orderReservationService.AddAsync(orderReservationResponseDto);
+            return Result.Success("Reserva criada com sucesso",200);
         }
         catch (Exception e)
         {

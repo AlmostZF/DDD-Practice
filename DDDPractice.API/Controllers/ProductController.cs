@@ -1,4 +1,5 @@
-using DDDPractice.Application.Shared;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
+using DDDPractice.Application.UseCases.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDPractice.API.Controllers;
@@ -7,63 +8,75 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class ProductController: ControllerBase
 {
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get()
+    
+    private readonly CreateProductUseCase _createProductUseCase;
+    private readonly DeleteProductUseCase _deleteProductUseCase;
+    private readonly GetAllProductUseCase _getAllProductUseCase;
+    private readonly GetProductUseCase _getProductUseCase;
+    private readonly UpdateProductUseCase _updateProductUseCase;
+
+    public ProductController(
+        CreateProductUseCase createProductUseCase,
+        DeleteProductUseCase deleteProductUseCase,
+        GetAllProductUseCase getAllProductUseCase,
+        GetProductUseCase getProductUseCase,
+        UpdateProductUseCase updateProductUseCase
+        )
     {
-        try
-        {
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar produto", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        _createProductUseCase = createProductUseCase;
+        _deleteProductUseCase = deleteProductUseCase;
+        _getAllProductUseCase = getAllProductUseCase;
+        _getProductUseCase = getProductUseCase;
+        _updateProductUseCase = updateProductUseCase;
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute]Guid id)
     {
-        try
-        {
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao deletar produto", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _getProductUseCase.ExecuteAsync(id);
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _getAllProductUseCase.ExecuteAsync();
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute]Guid id)
+    {
+        var result = await _deleteProductUseCase.ExecuteAsync(id);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create([FromBody]ProductCreateDTO productCreateDTO)
     {
-        try
-        {
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao criar produto", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _createProductUseCase.ExecuteAsync(productCreateDTO);
+
+        return result.Message != null
+            ? Created()
+            : BadRequest(result.Error);
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update()
+    public async Task<IActionResult> Update([FromBody]ProductUpdateDTO productUpdateDto)
     {
-        try
-        {
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao atualizar produto", 500);
-            return StatusCode(result.StatusCode, result);
-        } 
+        var result = await _updateProductUseCase.ExecuteAsync(productUpdateDto);
+
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     } 
 }

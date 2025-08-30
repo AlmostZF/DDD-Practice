@@ -2,7 +2,6 @@ namespace DDDPractice.Application.Shared;
 
 public class Result<T>
 {
-    public bool IsSuccess { get; set; }
     public string? Error { get; set; }
     public T? Value { get; set; }
 
@@ -17,10 +16,11 @@ public class Result
 {
     public bool IsSuccess { get; set; }
     public string? Error { get; set; }
+    public string? Message { get; set; }
     public int StatusCode { get; set; }
 
-    public static Result Success(int statusCode = 204) 
-        => new Result { StatusCode = statusCode };
+    public static Result Success(string message, int statusCode = 204) 
+        => new Result { StatusCode = statusCode, Message = message};
 
     public static Result Failure(string error, int statusCode = 500)
         => new Result { Error = error, StatusCode = statusCode };

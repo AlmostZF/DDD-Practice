@@ -1,4 +1,5 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Services;
 using DDDPractice.Application.Shared;
 
@@ -13,12 +14,12 @@ public class CreateProductUseCase
         _productService = productService;
     }
     
-    public async Task<Result> ExecuteAsync(ProductDTO product)
+    public async Task<Result> ExecuteAsync(ProductCreateDTO productCreateDTO)
     {
         try
         {
-            await _productService.AddAsync(product);
-            return Result.Success(200);
+            await _productService.AddAsync(productCreateDTO);
+            return Result.Success("Produto criado com sucesso",200);
         }
         catch (Exception e)
         {

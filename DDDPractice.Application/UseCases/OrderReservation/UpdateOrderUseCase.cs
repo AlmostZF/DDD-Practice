@@ -4,21 +4,21 @@ using DDDPractice.Application.Shared;
 
 namespace DDDPractice.Application.UseCases.OrderReservation;
 
-public class UpdadeOrderUseCase
+public class UpdateOrderUseCase
 {
     private readonly OrderReservationService _orderReservationService;
 
-    public UpdadeOrderUseCase(OrderReservationService orderReservationService)
+    public UpdateOrderUseCase(OrderReservationService orderReservationService)
     {
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result> ExecuteAsync(OrderReservationDTO orderReservationDto)
+    public async Task<Result> ExecuteAsync(OrderReservationResponseDTO orderReservationResponseDto)
     {
         try
         {
-            await _orderReservationService.UpdateAsync(orderReservationDto);
-            return Result.Success(200);
+            await _orderReservationService.UpdateAsync(orderReservationResponseDto);
+            return Result.Success("Reserva atualizada com sucesso",200);
         }
         catch (Exception e)
         {

@@ -30,11 +30,6 @@ public class SellerRepository: ISellerRepository
 
     public async Task UpdateAsync(SellerEntity seller)
     {
-        var existingSeller = await _context.Seller.FindAsync(seller.Id);
-        if (existingSeller == null)
-        {
-            throw new InvalidOperationException("Vendedor não encontrado.");
-        }
         _context.Seller.Update(seller);
         await _context.SaveChangesAsync();
     }

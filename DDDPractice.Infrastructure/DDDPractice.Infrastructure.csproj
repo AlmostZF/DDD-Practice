@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\DDDPractice.Application\DDDPractice.Application.csproj" />
     <ProjectReference Include="..\DDDPractice.Domain\DDDPractice.Domain.csproj" />
   </ItemGroup>
 

@@ -12,13 +12,12 @@ public class OrderReservationController: ControllerBase
     {
         try
         {
-            var result = Result.Success(200);
+            var result = Result.Success("",200);
             return StatusCode(result.StatusCode, result);
         }
         catch (Exception e)
         {   
-            var result = Result.Failure("Erro ao buscar carrinho", 500);
-            return StatusCode(result.StatusCode, result);
+            return BadRequest(e.Message);
         } 
     }
 
@@ -27,13 +26,12 @@ public class OrderReservationController: ControllerBase
     {
         try
         {
-            var result = Result.Success(200);
+            var result = Result.Success("",200);
             return StatusCode(result.StatusCode, result);
         }
         catch (Exception e)
         {   
-            var result = Result.Failure("Erro ao deletar carrinho", 500);
-            return StatusCode(result.StatusCode, result);
+            return BadRequest(e.Message);
         } 
     }
     
@@ -42,13 +40,12 @@ public class OrderReservationController: ControllerBase
     {
         try
         {
-            var result = Result.Success(200);
+            var result = Result.Success("",200);
             return StatusCode(result.StatusCode, result);
         }
         catch (Exception e)
         {   
-            var result = Result.Failure("Erro ao criar carrinho", 500);
-            return StatusCode(result.StatusCode, result);
+            return BadRequest(e.Message);
         } 
     }
     
@@ -57,13 +54,12 @@ public class OrderReservationController: ControllerBase
     {
         try
         {
-            var result = Result.Success(200);
+            var result = Result.Success("",200);
             return StatusCode(result.StatusCode, result);
         }
         catch (Exception e)
         {   
-            var result = Result.Failure("Erro ao atualizar carrinho", 500);
-            return StatusCode(result.StatusCode, result);
+            return BadRequest(e.Message);
         } 
     } 
 }

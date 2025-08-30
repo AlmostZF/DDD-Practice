@@ -6,12 +6,12 @@ namespace DDDPractice.Application.Interfaces;
 
 public interface IOrderReservationService
 {
-    Task<List<OrderReservationDTO>> GetBySecurityCodeAsync(SecurityCode securityCode);
-    Task<OrderReservationDTO> GetByIdAsync(Guid id);
-    Task UpdateStatusAsync(OrderReservationDTO status, Guid id);
-    Task UpdateAsync(OrderReservationDTO order);
+    Task<List<OrderReservationResponseDTO>> GetBySecurityCodeAsync(SecurityCode securityCode);
+    Task<OrderReservationResponseDTO> GetByIdAsync(Guid id);
+    Task UpdateStatusAsync(OrderReservationResponseDTO status, Guid id);
+    Task UpdateAsync(OrderReservationResponseDTO order);
     Task DeleteAsync(Guid id);
-    Task AddAsync(OrderReservationDTO order);
-    Task<List<OrderReservationDTO>> GetByStatusAsync(StatusOrder status);
-    Task<List<OrderReservationDTO>> GetAllAsync();
+    Task AddAsync(OrderReservationResponseDTO order);
+    Task<List<OrderReservationResponseDTO>> GetByStatusAsync(StatusOrder status);
+    Task<List<OrderReservationResponseDTO>> GetAllAsync();
 }

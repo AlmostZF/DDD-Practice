@@ -1,6 +1,7 @@
 using DDDPractice.Application.DTOs;
-using DDDPractice.Application.Interfaces;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Shared;
+using DDDPractice.Application.UseCases.Stock;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDPractice.API.Controllers;
@@ -9,76 +10,63 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class StockController: ControllerBase
 {
-    private readonly IStockService _stockService;
+    private readonly CreateStockUseCase _createStockUseCase;
+    private readonly UpdateQuantityUseCase _updateStockUseCase;
+    private readonly GetAllStockUseCase _getAllStockUseCase;
+    private readonly GetProductStockUseCase _getProductStockUseCase;
 
-    public StockController(IStockService stockService)
+    public StockController(
+        CreateStockUseCase createStockUseCase,
+        UpdateQuantityUseCase updateStockUseCase,
+        GetAllStockUseCase getAllStockUseCase,
+        GetProductStockUseCase getProductStockUseCase)
     {
-        _stockService = stockService;
+        _createStockUseCase = createStockUseCase;
+        _updateStockUseCase = updateStockUseCase;
+        _getAllStockUseCase = getAllStockUseCase;
+        _getProductStockUseCase = getProductStockUseCase;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            var StockList = await _stockService.GetAllAsync();
-            var result = Result<List<StockDTO>>.Success(StockList, 200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar estoque", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _getAllStockUseCase.ExecuteAsync();
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
     }
     
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        try
-        {
-            var StockDto = await _stockService.GetByProductIdAsync(id);
-            var result = Result<StockDTO>.Success(StockDto, 200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar estoque", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _getProductStockUseCase.ExecuteAsync(id);
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+
     }
     
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] StockDTO stockDto)
+    public async Task<IActionResult> Create([FromBody] StockCreateDTO stockCreateDto)
     {
-        try
-        {
-            await _stockService.AddAsync(stockDto);
-            var result = Result.Success(201);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar estoque", 500);
-            return StatusCode(result.StatusCode, result);
-        }
+        var result = await _createStockUseCase.ExecuteAsync(stockCreateDto);
+
+        return result.Message != null
+            ? Created()
+            : BadRequest(result.Error);
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Guid id, int Quantity )
+    public async Task<IActionResult> Update([FromBody] StockUpdateDTO stockUpdateDto)
     {
-        try
-        {
-            await _stockService.UpdateQuantityAsync(id,Quantity);
-            var result = Result.Success(200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            var result = Result.Failure("Erro ao buscar estoque", 500);
-            return StatusCode(result.StatusCode, result);
-        }   
+        var result = await _updateStockUseCase.ExecuteAsync(stockUpdateDto);
+        
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
 }

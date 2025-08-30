@@ -18,7 +18,7 @@ public class DeleteOrderUseCase
         try
         {
             await _orderReservationService.DeleteAsync(id);
-            return Result.Success(200);
+            return Result.Success("Reserva deletada com sucesso",200);
         }
         catch (Exception e)
         {

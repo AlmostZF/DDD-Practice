@@ -16,8 +16,8 @@ public class DeleteSellerUseCase
     {
         try
         {
-            _sellerService.DeleteAsync(id);
-            return Result.Success(200);
+            await _sellerService.DeleteAsync(id);
+            return Result.Success("Vendedor deletado com sucesso",200);
         }
         catch (Exception e)
         {

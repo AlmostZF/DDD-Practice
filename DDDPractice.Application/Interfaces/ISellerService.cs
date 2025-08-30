@@ -1,12 +1,13 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
 namespace DDDPractice.Application.Interfaces;
 
 public interface ISellerService
 {
-    Task<SellerDTO> GetByIdAsync(Guid id);
-    Task AddAsync(SellerDTO seller);
-    Task UpdateAsync(SellerDTO seller);
+    Task<SellerResponseDTO> GetByIdAsync(Guid id);
+    Task<Guid> AddAsync(SellerCreateDTO sellerCreate);
+    Task UpdateAsync(SellerUpdateDTO sellerUpdate);
     Task DeleteAsync(Guid id);
-    Task<List<SellerDTO>> GetAllAsync();
+    Task<List<SellerResponseDTO>> GetAllAsync();
 }
