@@ -1,4 +1,5 @@
 using DDD_Practice.DDDPractice.Domain;
+using DDD_Practice.DDDPractice.Domain.Entities;
 using DDD_Practice.DDDPractice.Domain.Enums;
 using DDD_Practice.DDDPractice.Domain.Repositories;
 using DDD_Practice.DDDPractice.Domain.ValueObjects;
@@ -15,14 +16,15 @@ public class OrderReservationRepository : IOrderReservationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<OrderReservationEntity>> GetBySecurityCodeAsync(SecurityCode SecurityCode)
+    public async Task<IEnumerable<OrderReservationEntity>> GetBySecurityCodeAsync(string securityCode)
     {
         return await _context.OrderReservation
-            .Where(o => o.SecurityCode == SecurityCode)
+            .Include(o => o.User)
             .Include(o => o.ListOrderItems)
-                .ThenInclude(i => i.Seller)
+            .ThenInclude(i => i.Seller)
             .Include(o => o.ListOrderItems)
-                .ThenInclude(i => i.Product)
+            .ThenInclude(i => i.Product)
+            .Where(o => o.User.SecurityCode.Value == securityCode)
             .ToListAsync();
     }
 
@@ -100,9 +102,7 @@ public class OrderReservationRepository : IOrderReservationRepository
         return await _context.OrderReservation
             .Include(o => o.User)
             .Include(o => o.ListOrderItems)
-                .ThenInclude(i => i.Seller.Name)
-            .Include(o => o.ListOrderItems)
-                .ThenInclude(i => i.Product.Name)
             .ToListAsync();
     }
+    
 }

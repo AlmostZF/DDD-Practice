@@ -1,4 +1,8 @@
+using DDD_Practice.DDDPractice.Domain.Enums;
+using DDD_Practice.DDDPractice.Domain.ValueObjects;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Shared;
+using DDDPractice.Application.UseCases.OrderReservation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDDPractice.API.Controllers;
@@ -7,59 +11,99 @@ namespace DDDPractice.API.Controllers;
 [Route("api/v1/[controller]")]
 public class OrderReservationController: ControllerBase
 {
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get()
+
+    private readonly CreateOrderUseCase _createOrderUseCase;
+    private readonly DeleteOrderUseCase _deleteOrderUseCase;
+    private readonly GetAllOrderUseCase _getAllOrderUseCase;
+    private readonly GetOrderBySecurityCodeUseCase _getOrderBySecurityUseCase;
+    private readonly GetOrderByStatusUseCase _getOrderByStatusUseCase;
+    private readonly GetOrderUseCase _getOrderUseCase;
+    private readonly UpdateOrderUseCase _updateOrderUseCase;
+
+    public OrderReservationController(
+        CreateOrderUseCase createOrderUseCase,
+        DeleteOrderUseCase deleteOrderUseCase,
+        GetAllOrderUseCase getAllOrderUseCase,
+        GetOrderBySecurityCodeUseCase getOrderBySecurityUseCase,
+        GetOrderByStatusUseCase getOrderByStatusUseCase,
+        GetOrderUseCase getOrderUseCase,
+        UpdateOrderUseCase updateOrderUseCase
+        )
     {
-        try
-        {
-            var result = Result.Success("",200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            return BadRequest(e.Message);
-        } 
+        _createOrderUseCase = createOrderUseCase;
+        _deleteOrderUseCase = deleteOrderUseCase;
+        _getAllOrderUseCase = getAllOrderUseCase;
+        _getOrderBySecurityUseCase = getOrderBySecurityUseCase;
+        _getOrderByStatusUseCase = getOrderByStatusUseCase;
+        _getOrderUseCase = getOrderUseCase;
+        _updateOrderUseCase = updateOrderUseCase;
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete()
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        try
-        {
-            var result = Result.Success("",200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            return BadRequest(e.Message);
-        } 
+
+            var result = await _getOrderUseCase.ExecuteAsync(id);
+            return result.Value != null
+                ? Ok(result.Value)
+                : BadRequest(result.Error);
+    }
+    
+    [HttpGet()]
+    public async Task<IActionResult> GetAll()
+    {
+
+        var result = await _getAllOrderUseCase.ExecuteAsync();
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+    
+    [HttpGet("status/{status}")]
+    public async Task<IActionResult> GetByStatus([FromRoute] StatusOrder status)
+    {
+
+        var result = await _getOrderByStatusUseCase.ExecuteAsync(status);
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+    
+    [HttpGet("securitycode/{securityCode}")]
+    public async Task<IActionResult> GetBySecutityCode([FromRoute] string securityCode)
+    {
+
+        var result = await _getOrderBySecurityUseCase.ExecuteAsync(securityCode);
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        var result = await _deleteOrderUseCase.ExecuteAsync(id);
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create([FromBody]OrderReservationCreateDTO orderReservationCreateDto)
     {
-        try
-        {
-            var result = Result.Success("",200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            return BadRequest(e.Message);
-        } 
+        var result = await _createOrderUseCase.ExecuteAsync(orderReservationCreateDto);
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update()
+    public async Task<IActionResult> Update([FromBody]OrderReservationUpdateDTO orderReservationUpdateDto)
     {
-        try
-        {
-            var result = Result.Success("",200);
-            return StatusCode(result.StatusCode, result);
-        }
-        catch (Exception e)
-        {   
-            return BadRequest(e.Message);
-        } 
-    } 
+        var result = await _updateOrderUseCase.ExecuteAsync(orderReservationUpdateDto);
+        return result.Message != null
+            ? Ok(result.Message)
+            : BadRequest(result.Error);
+    }
 }

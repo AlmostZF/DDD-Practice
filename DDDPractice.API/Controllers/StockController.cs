@@ -38,7 +38,7 @@ public class StockController: ControllerBase
     }
     
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var result = await _getProductStockUseCase.ExecuteAsync(id);

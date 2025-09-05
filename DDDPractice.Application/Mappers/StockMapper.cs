@@ -35,10 +35,10 @@ public class StockMapper
         
         return new StockEntity
         {
-            Id = stockResponseDto.Id ?? Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Quantity = stockResponseDto.Quantity,
-            MovementDate = stockResponseDto.MovementDate ?? new DateTime(),
-            ProductId = stockResponseDto.ProductId!.Value,
+            MovementDate = stockResponseDto.MovementDate ?? DateTime.Now,
+            ProductId = stockResponseDto.ProductId,
         };
 
     }
@@ -51,7 +51,7 @@ public class StockMapper
         {
             Id = Guid.NewGuid(),
             Quantity = stockCreateDTO.Quantity,
-            MovementDate = new DateTime(),
+            MovementDate = DateTime.Now,
             ProductId = stockCreateDTO.ProductId,
             Total = StockMoney.CalculateTotal(produtUnitPrice, stockCreateDTO.Quantity).Amount,
             
@@ -64,7 +64,7 @@ public class StockMapper
 
         {
             stockEntity.Quantity = stockUpdateDTO.Quantity; 
-            stockEntity.MovementDate = new DateTime();
+            stockEntity.MovementDate = DateTime.Now;
             stockEntity.Total = StockMoney.CalculateTotal(stockEntity.Product.UnitPrice, stockUpdateDTO.Quantity).Amount;
         }
 

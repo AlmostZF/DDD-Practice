@@ -1,4 +1,5 @@
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Services;
 using DDDPractice.Application.Shared;
 
@@ -13,11 +14,11 @@ public class UpdateOrderUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result> ExecuteAsync(OrderReservationResponseDTO orderReservationResponseDto)
+    public async Task<Result> ExecuteAsync(OrderReservationUpdateDTO orderReservationUpdateDto)
     {
         try
         {
-            await _orderReservationService.UpdateAsync(orderReservationResponseDto);
+            await _orderReservationService.UpdateAsync(orderReservationUpdateDto);
             return Result.Success("Reserva atualizada com sucesso",200);
         }
         catch (Exception e)

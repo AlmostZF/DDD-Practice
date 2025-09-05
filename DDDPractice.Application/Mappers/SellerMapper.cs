@@ -32,7 +32,7 @@ public class SellerMapper
         
         return new SellerEntity(sellerResponseDto.PickupLocation)
         {
-            Id = sellerResponseDto.Id ?? Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Name = sellerResponseDto.Name ,
             PhoneNumber = sellerResponseDto.PhoneNumber,
         };

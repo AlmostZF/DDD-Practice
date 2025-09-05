@@ -1,7 +1,9 @@
 using DDD_Practice.DDDPractice.Domain.Enums;
 using DDD_Practice.DDDPractice.Domain.Repositories;
+using DDD_Practice.DDDPractice.Domain.Service;
 using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Mappers;
 
@@ -11,13 +13,18 @@ public class OrderReservationService : IOrderReservationService
 {
 
     private readonly IOrderReservationRepository _orderReservationRepository;
-
-    public OrderReservationService(IOrderReservationRepository orderReservationRepository)
+    private readonly IReservationFeeCalculate _calculate;
+        
+    public OrderReservationService(
+        IOrderReservationRepository orderReservationRepository,
+        IReservationFeeCalculate calculate
+    )
     {
         _orderReservationRepository = orderReservationRepository;
+        _calculate = calculate;
     }
 
-    public async Task<List<OrderReservationResponseDTO>> GetBySecurityCodeAsync(SecurityCode securityCode)
+    public async Task<List<OrderReservationResponseDTO>> GetBySecurityCodeAsync(string securityCode)
     {
         var listOrder= await _orderReservationRepository.GetBySecurityCodeAsync(securityCode);
         return OrderReservationMapper.ToDtoList(listOrder);
@@ -26,18 +33,34 @@ public class OrderReservationService : IOrderReservationService
     public async Task<OrderReservationResponseDTO> GetByIdAsync(Guid id)
     {
         var orderReservation = await _orderReservationRepository.GetByIdAsync(id);
+        var list = orderReservation.ListOrderItems.ToList();
+
+        for (var i = 0; i < list.Count(); i++)
+        {
+            var item = list[i];
+            orderReservation.ValueTotal += item.TotalPrice;
+        }
+        
         return OrderReservationMapper.ToDto(orderReservation);
     }
 
-    public async Task UpdateStatusAsync(OrderReservationResponseDTO orderReservationResponseDto, Guid id)
+    public async Task UpdateStatusAsync(OrderReservationResponseDTO orderReservationResponseDto)
     {
-       await _orderReservationRepository.UpdateStatusAsync(orderReservationResponseDto.OrderStatus, id);
+        var orderReservation = await _orderReservationRepository.GetByIdAsync(orderReservationResponseDto.Id);
+        if (orderReservation == null)
+            throw new InvalidOperationException("Reserva não encontrada.");
+        
+        await _orderReservationRepository.UpdateStatusAsync(orderReservationResponseDto.OrderStatus,orderReservationResponseDto.Id);
     }
-
-    public async Task UpdateAsync(OrderReservationResponseDTO orderReservationResponseDto)
+    
+    public async Task UpdateAsync(OrderReservationUpdateDTO orderReservationUpdateDTO)
     {
-        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationResponseDto);
-        await _orderReservationRepository.UpdateAsync(orderReservationEntity);
+        var orderReservation = await _orderReservationRepository.GetByIdAsync(orderReservationUpdateDTO.Id);
+        if (orderReservation == null)
+            throw new InvalidOperationException("Reserva não encontrada.");
+        
+        OrderReservationMapper.ToUpdateEntity(orderReservation,orderReservationUpdateDTO);
+        await _orderReservationRepository.UpdateAsync(orderReservation);
     }
 
     public async Task DeleteAsync(Guid id)
@@ -45,9 +68,19 @@ public class OrderReservationService : IOrderReservationService
        await _orderReservationRepository.DeleteAsync(id);
     }
 
-    public async Task AddAsync(OrderReservationResponseDTO orderReservationResponseDto)
+    public async Task AddAsync(OrderReservationCreateDTO orderReservationCreateDto)
     {
-        var orderReservationEntity = OrderReservationMapper.ToEntity(orderReservationResponseDto);
+        var list = orderReservationCreateDto.listOrderItens.ToList();
+        decimal? totalValue = 0;
+        for (var i = 0; i < list.Count(); i++)
+        {
+            var item = list[i];
+            item.TotalPrice = item.Quantity * item.UnitPrice;
+            totalValue += item.TotalPrice;
+        }
+        
+        var orderReservationEntity = OrderReservationMapper.ToCreateEntity(orderReservationCreateDto, _calculate.CalculateFeeCalculate(totalValue??0), totalValue??0);
+       
         await _orderReservationRepository.AddAsync(orderReservationEntity);
     }
 

@@ -30,7 +30,7 @@ public class ProductController: ControllerBase
         _updateProductUseCase = updateProductUseCase;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute]Guid id)
     {
         var result = await _getProductUseCase.ExecuteAsync(id);
@@ -50,7 +50,7 @@ public class ProductController: ControllerBase
             : BadRequest(result.Error);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute]Guid id)
     {
         var result = await _deleteProductUseCase.ExecuteAsync(id);

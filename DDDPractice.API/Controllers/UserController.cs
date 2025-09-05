@@ -40,7 +40,7 @@ public class UserController: ControllerBase
             : BadRequest(result.Error);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var result = await _getUserUseCase.ExecuteAsync(id);
@@ -70,7 +70,7 @@ public class UserController: ControllerBase
             : BadRequest(result.Error);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
     {
 

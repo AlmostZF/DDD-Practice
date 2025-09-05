@@ -1,4 +1,5 @@
 using DDD_Practice.DDDPractice.Domain.Repositories;
+using DDD_Practice.DDDPractice.Domain.Service;
 using DDD_Practice.DDDPractice.Infrastructure;
 using DDD_Practice.DDDPractice.Infrastructure.Repositories;
 using DDDPractice.Application.Interfaces;
@@ -22,13 +23,14 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Repositories
 builder.Services.AddScoped<IOrderReservationRepository, OrderReservationRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISellerRepository, SellerRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IReservationFeeCalculate, ReservationFeeCalculate>();
 
 // Use Case
 builder.Services.AddScoped<CreateUserUseCase>();

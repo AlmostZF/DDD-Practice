@@ -15,11 +15,11 @@ public class GetOrderBySecurityCodeUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(StatusOrder status)
+    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(string securityCode)
     {
         try
         {
-            var orderReservationDtos = await _orderReservationService.GetByStatusAsync(status);
+            var orderReservationDtos = await _orderReservationService.GetBySecurityCodeAsync(securityCode);
             return Result<List<OrderReservationResponseDTO>>.Success(orderReservationDtos,200);
         }
         catch (Exception e)

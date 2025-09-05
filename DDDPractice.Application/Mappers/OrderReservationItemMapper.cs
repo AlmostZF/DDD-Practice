@@ -12,15 +12,16 @@ public static class OrderReservationItemMapper
         
         return new OrderReservationItemResponseDTO
         {
-            Id = orderReservationItemEntity.Id,
+            Id = Guid.NewGuid(),
             Quantity = orderReservationItemEntity.Quantity,
             ProductId = orderReservationItemEntity.ProductId,
             ReservationId = orderReservationItemEntity.ReservationId,
             SellerId = orderReservationItemEntity.SellerId,
             TotalPrice = orderReservationItemEntity.TotalPrice,
             UnitPrice = orderReservationItemEntity.UnitPrice,
-            ProductResponse = ProductMapper.ToDto(orderReservationItemEntity.Product),
-            SellerResponseDto = SellerMapper.ToDto(orderReservationItemEntity.Seller)
+            
+            // Product = ProductMapper.ToDto(orderReservationItemEntity.Product),
+            // Seller = SellerMapper.ToDto(orderReservationItemEntity.Seller)
         };
 
     }
@@ -37,12 +38,12 @@ public static class OrderReservationItemMapper
         
         return new OrderReservationItemEntity
         {
-            Id = orderReservationResponseDto.Id ?? Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Quantity = orderReservationResponseDto.Quantity,
             ProductId = orderReservationResponseDto.ProductId,
-            ReservationId = orderReservationResponseDto.ReservationId!,
+            ReservationId = orderReservationResponseDto.ReservationId.Value,
             SellerId = orderReservationResponseDto.SellerId,
-            TotalPrice = orderReservationResponseDto.TotalPrice,
+            TotalPrice = (orderReservationResponseDto.Quantity * orderReservationResponseDto.UnitPrice),
             UnitPrice = orderReservationResponseDto.UnitPrice
         };
     }

@@ -1,3 +1,4 @@
+using DDD_Practice.DDDPractice.Domain.Enums;
 using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using DDDPractice.Application.DTOs;
 using DDDPractice.Application.Services;
@@ -14,11 +15,11 @@ public class GetOrderByStatusUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(SecurityCode securityCode)
+    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(StatusOrder securityCode)
     {
         try
         {
-            var orderReservationDtos = await _orderReservationService.GetBySecurityCodeAsync(securityCode);
+            var orderReservationDtos = await _orderReservationService.GetByStatusAsync(securityCode);
             return Result<List<OrderReservationResponseDTO>>.Success(orderReservationDtos,200);
         }
         catch (Exception e)

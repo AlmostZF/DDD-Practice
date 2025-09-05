@@ -12,8 +12,10 @@ public class OrderReservationItemEntity
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }
     
-    
+    [ForeignKey(nameof(ProductId))]
     public ProductEntity Product { get; set; }
+    
+    [ForeignKey(nameof(SellerId))]
     public SellerEntity Seller { get; set; }
     
     [ForeignKey(nameof(ReservationId))]

@@ -34,7 +34,7 @@ public class SellerController: ControllerBase
         _getSellerUseCase = getSellerUseCase;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> getById([FromRoute] Guid id)
     {
         var result = await _getSellerUseCase.ExecuteAsync(id);
@@ -56,7 +56,7 @@ public class SellerController: ControllerBase
         
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var result = await _deleteSellerUseCase.ExecuteAsync(id);

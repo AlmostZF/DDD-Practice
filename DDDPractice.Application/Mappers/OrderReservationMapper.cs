@@ -1,5 +1,8 @@
 using DDD_Practice.DDDPractice.Domain;
+using DDD_Practice.DDDPractice.Domain.Entities;
+using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using DDDPractice.Application.DTOs;
+using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
 namespace DDDPractice.Application.Mappers;
 
@@ -15,16 +18,15 @@ public class OrderReservationMapper
             OrderStatus = orderReservationEntity.OrderStatus,
             PickupDate = orderReservationEntity.PickupDate,
             PickupDeadline = orderReservationEntity.PickupDeadline,
-            PickupLocation =
-            {
-                Street = orderReservationEntity.PickupLocation.Street,
-                City = orderReservationEntity.PickupLocation.City,
-                State = orderReservationEntity.PickupLocation.State,
-                Number = orderReservationEntity.PickupLocation.Number
-            },
+            PickupLocation = new PickupLocation(
+                street: orderReservationEntity.PickupLocation.Street,
+                city: orderReservationEntity.PickupLocation.City,
+                state: orderReservationEntity.PickupLocation.State,
+                number: orderReservationEntity.PickupLocation.Number
+            ),
             ReservationDate = orderReservationEntity.ReservationDate,
             ReservationFee = orderReservationEntity.ReservationFee,
-            SecurityCode = orderReservationEntity.SecurityCode,
+            SecurityCode = orderReservationEntity.User.SecurityCode,
             UserId = orderReservationEntity.UserId,
             ValueTotal = orderReservationEntity.ValueTotal,
             UserResponse = UserMapper.ToDto(orderReservationEntity.User),
@@ -43,9 +45,9 @@ public class OrderReservationMapper
     {
         if (orderReservationResponseDto == null) return new OrderReservationEntity();
         
-        return new OrderReservationEntity
+        var order =  new OrderReservationEntity
         {
-            Id = orderReservationResponseDto.Id!.Value,
+            Id = Guid.NewGuid(),
             OrderStatus = orderReservationResponseDto.OrderStatus,
             PickupDate = orderReservationResponseDto.PickupDate,
             PickupDeadline = orderReservationResponseDto.PickupDeadline,
@@ -56,12 +58,85 @@ public class OrderReservationMapper
                 State = orderReservationResponseDto.PickupLocation.State,
                 Number = orderReservationResponseDto.PickupLocation.Number,
             },
-            ReservationDate = orderReservationResponseDto.ReservationDate ?? new DateTime(),
+            ReservationDate = orderReservationResponseDto.ReservationDate ?? DateTime.Now,
             ReservationFee = orderReservationResponseDto.ReservationFee,
             SecurityCode = orderReservationResponseDto.SecurityCode,
             UserId = orderReservationResponseDto.UserId,
             ValueTotal = orderReservationResponseDto.ValueTotal
         };
+        foreach (var itemDto in orderReservationResponseDto.listOrderItens)
+        {
+            var item = new OrderReservationItemEntity()
+            {
+                Id = Guid.NewGuid(),
+                ProductId = itemDto.ProductId,
+                SellerId = itemDto.SellerId,
+                Quantity = itemDto.Quantity,
+                UnitPrice = itemDto.UnitPrice,
+                TotalPrice = itemDto.TotalPrice,
+                ReservationId = order.Id
+            };
+
+            order.ListOrderItems.Add(item);
+        }
+
+        return order;
+    }
+    
+    public static void ToUpdateEntity(OrderReservationEntity orderEntity, OrderReservationUpdateDTO orderReservationUpdateDto)
+    {
+        orderEntity.OrderStatus = orderReservationUpdateDto.OrderStatus;
+        orderEntity.ListOrderItems = OrderReservationItemMapper.ToEntitylist(orderReservationUpdateDto.listOrderItens.ToList());
+        orderEntity.PickupDate = orderReservationUpdateDto.PickupDate;
+        orderEntity.PickupDeadline = orderReservationUpdateDto.PickupDeadline;
+        orderEntity.ReservationDate = orderReservationUpdateDto.ReservationDate;
+        orderEntity.ReservationFee = orderReservationUpdateDto.ReservationFee;
+        orderEntity.SecurityCode = orderReservationUpdateDto.SecurityCode;
+        orderEntity.ValueTotal = orderReservationUpdateDto.ValueTotal;
+
+    }
+    public static OrderReservationEntity ToCreateEntity(OrderReservationCreateDTO orderReservationCreateDto, decimal reservationFee, decimal total)
+    {
+        if (orderReservationCreateDto == null) return new OrderReservationEntity();
+        try
+        {
+            var id = Guid.NewGuid();
+            
+            var list = orderReservationCreateDto.listOrderItens.ToList();
+            for (var i = 0; i < list.Count(); i++)
+            {
+                var item = list[i];
+                item.ReservationId = id;
+            }
+            
+            return new OrderReservationEntity()
+            {
+                Id = id,
+                OrderStatus = orderReservationCreateDto.OrderStatus,
+                ListOrderItems = OrderReservationItemMapper.ToEntitylist(orderReservationCreateDto.listOrderItens),
+                PickupDate = orderReservationCreateDto.PickupDate,
+                PickupDeadline = orderReservationCreateDto.PickupDeadline,
+                PickupLocation = new PickupLocation(
+                    street: orderReservationCreateDto.PickupLocation.Street,
+                    city: orderReservationCreateDto.PickupLocation.City,
+                    state: orderReservationCreateDto.PickupLocation.State,
+                    number: orderReservationCreateDto.PickupLocation.Number
+                ),
+                ReservationDate = orderReservationCreateDto.ReservationDate,
+                ReservationFee = reservationFee,
+                SecurityCode = orderReservationCreateDto.SecurityCode,
+                UserId = orderReservationCreateDto.UserId,
+                ValueTotal = total
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+
+        return new OrderReservationEntity();
     }
     
     public static List<OrderReservationEntity> ToEntitylist(List<OrderReservationResponseDTO> orderReservationDto)

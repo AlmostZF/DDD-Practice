@@ -6,10 +6,9 @@ namespace DDD_Practice.DDDPractice.Domain.Repositories;
 
 public interface IOrderReservationRepository
 {
-    Task<IEnumerable<OrderReservationEntity>> GetBySecurityCodeAsync(SecurityCode securityCode);
+    Task<IEnumerable<OrderReservationEntity>> GetBySecurityCodeAsync(string securityCode);
     Task<OrderReservationEntity> GetByIdAsync(Guid id);
     Task UpdateStatusAsync(StatusOrder status, Guid id);
-
     Task UpdateAsync(OrderReservationEntity order);
     Task DeleteAsync(Guid id);
     Task AddAsync(OrderReservationEntity order);
