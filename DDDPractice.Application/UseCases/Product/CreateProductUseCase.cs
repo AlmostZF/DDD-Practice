@@ -14,16 +14,16 @@ public class CreateProductUseCase
         _productService = productService;
     }
     
-    public async Task<Result> ExecuteAsync(ProductCreateDTO productCreateDTO)
+    public async Task<Result<Guid>> ExecuteAsync(ProductCreateDTO productCreateDTO)
     {
         try
         {
-            await _productService.AddAsync(productCreateDTO);
-            return Result.Success("Produto criado com sucesso",200);
+            var guid = await _productService.AddAsync(productCreateDTO);
+            return Result<Guid>.Success( guid,200);
         }
         catch (Exception e)
         {
-            return Result.Failure("Erro ao criar Produto", 500);
+            return Result<Guid>.Failure("Erro ao criar Produto", 500);
         }
     }
 }

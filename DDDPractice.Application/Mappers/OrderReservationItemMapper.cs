@@ -19,7 +19,8 @@ public static class OrderReservationItemMapper
             SellerId = orderReservationItemEntity.SellerId,
             TotalPrice = orderReservationItemEntity.TotalPrice,
             UnitPrice = orderReservationItemEntity.UnitPrice,
-            
+            Name = orderReservationItemEntity.Product.Name,
+            SellerName = orderReservationItemEntity.Seller.Name
             // Product = ProductMapper.ToDto(orderReservationItemEntity.Product),
             // Seller = SellerMapper.ToDto(orderReservationItemEntity.Seller)
         };
@@ -48,6 +49,10 @@ public static class OrderReservationItemMapper
         };
     }
     
+    public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemEntity> orderReservationDto)
+    {
+        return orderReservationDto.ToList();
+    }
     public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemResponseDTO> orderReservationDto)
     {
         return orderReservationDto.Select(ToEntity).ToList();

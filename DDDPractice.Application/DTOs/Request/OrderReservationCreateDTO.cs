@@ -16,7 +16,7 @@ public class OrderReservationCreateDTO
     public StatusOrder OrderStatus { get; set; }
     
     [JsonPropertyName("listOrderItens")] 
-    public List<OrderReservationItemResponseDTO> listOrderItens { get; set; }
+    public List<OrderReservationItemCreateDTO> listOrderItens { get; set; }
     
 
 }

@@ -26,8 +26,6 @@ public class OrderReservationMapper
             ),
             ReservationDate = orderReservationEntity.ReservationDate,
             ReservationFee = orderReservationEntity.ReservationFee,
-            SecurityCode = orderReservationEntity.User.SecurityCode,
-            UserId = orderReservationEntity.UserId,
             ValueTotal = orderReservationEntity.ValueTotal,
             UserResponse = UserMapper.ToDto(orderReservationEntity.User),
             listOrderItens = OrderReservationItemMapper.ToDtoList(orderReservationEntity.ListOrderItems)
@@ -60,8 +58,6 @@ public class OrderReservationMapper
             },
             ReservationDate = orderReservationResponseDto.ReservationDate ?? DateTime.Now,
             ReservationFee = orderReservationResponseDto.ReservationFee,
-            SecurityCode = orderReservationResponseDto.SecurityCode,
-            UserId = orderReservationResponseDto.UserId,
             ValueTotal = orderReservationResponseDto.ValueTotal
         };
         foreach (var itemDto in orderReservationResponseDto.listOrderItens)
@@ -83,16 +79,17 @@ public class OrderReservationMapper
         return order;
     }
     
-    public static void ToUpdateEntity(OrderReservationEntity orderEntity, OrderReservationUpdateDTO orderReservationUpdateDto)
+    public static void ToUpdateEntity(OrderReservationEntity orderEntity, OrderReservationUpdateDTO orderReservationUpdateDto,
+        ICollection<OrderReservationItemEntity> listOrderItem,  decimal reservationFee, decimal total)
     {
         orderEntity.OrderStatus = orderReservationUpdateDto.OrderStatus;
-        orderEntity.ListOrderItems = OrderReservationItemMapper.ToEntitylist(orderReservationUpdateDto.listOrderItens.ToList());
+        orderEntity.ListOrderItems = listOrderItem;
         orderEntity.PickupDate = orderReservationUpdateDto.PickupDate;
         orderEntity.PickupDeadline = orderReservationUpdateDto.PickupDeadline;
         orderEntity.ReservationDate = orderReservationUpdateDto.ReservationDate;
-        orderEntity.ReservationFee = orderReservationUpdateDto.ReservationFee;
+        orderEntity.ReservationFee = reservationFee;
         orderEntity.SecurityCode = orderReservationUpdateDto.SecurityCode;
-        orderEntity.ValueTotal = orderReservationUpdateDto.ValueTotal;
+        orderEntity.ValueTotal = total;
 
     }
     public static OrderReservationEntity ToCreateEntity(OrderReservationCreateDTO orderReservationCreateDto, decimal reservationFee, decimal total)
@@ -102,18 +99,11 @@ public class OrderReservationMapper
         {
             var id = Guid.NewGuid();
             
-            var list = orderReservationCreateDto.listOrderItens.ToList();
-            for (var i = 0; i < list.Count(); i++)
-            {
-                var item = list[i];
-                item.ReservationId = id;
-            }
-            
             return new OrderReservationEntity()
             {
                 Id = id,
                 OrderStatus = orderReservationCreateDto.OrderStatus,
-                ListOrderItems = OrderReservationItemMapper.ToEntitylist(orderReservationCreateDto.listOrderItens),
+                ListOrderItems = [],
                 PickupDate = orderReservationCreateDto.PickupDate,
                 PickupDeadline = orderReservationCreateDto.PickupDeadline,
                 PickupLocation = new PickupLocation(

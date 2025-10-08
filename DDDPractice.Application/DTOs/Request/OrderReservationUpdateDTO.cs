@@ -18,6 +18,6 @@ public class OrderReservationUpdateDTO
     public StatusOrder OrderStatus { get; set; }
     public decimal ValueTotal { get; set; }
     
-    public IEnumerable<OrderReservationItemResponseDTO> listOrderItens { get; set; }
+    public IEnumerable<OrderReservationItemUpdateDTO> listOrderItens { get; set; }
     
 }

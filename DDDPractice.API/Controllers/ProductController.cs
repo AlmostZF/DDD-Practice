@@ -65,8 +65,8 @@ public class ProductController: ControllerBase
     {
         var result = await _createProductUseCase.ExecuteAsync(productCreateDTO);
 
-        return result.Message != null
-            ? Created()
+        return result.Value != null
+            ? Created($"/api/products/{result.Value}",result.Value)
             : BadRequest(result.Error);
     }
     

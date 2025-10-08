@@ -6,8 +6,7 @@ namespace DDDPractice.Application.DTOs;
 public class OrderReservationResponseDTO
 {
     public Guid Id { get; set; }
-    public SecurityCode SecurityCode { get; set; }
-    public Guid UserId { get; set; }
+
     public DateTime? ReservationDate { get; set; }
     public DateTime PickupDate { get; set; }
     public DateTime PickupDeadline { get; set; }

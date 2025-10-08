@@ -102,6 +102,9 @@ public class OrderReservationRepository : IOrderReservationRepository
         return await _context.OrderReservation
             .Include(o => o.User)
             .Include(o => o.ListOrderItems)
+                .ThenInclude(item => item.Product)
+            .Include(o => o.ListOrderItems)
+                .ThenInclude(item => item.Seller)
             .ToListAsync();
     }
     
