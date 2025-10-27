@@ -19,18 +19,18 @@ public class StockService : IStockService
         _productRepository = productRepository;
     }
  
-    public async Task<List<StockResponseDTO>> GetAllAsync()
+    public async Task<List<StockResponseDto>> GetAllAsync()
     {
         var stockList = await _stockRepository.GetAllAsync();
         return StockMapper.ToDtoList(stockList);
     }
 
-    public async Task<StockResponseDTO> GetByIdAsync(Guid productId)
+    public async Task<StockResponseDto> GetByIdAsync(Guid stockId)
     {
-        var stock = await _stockRepository.GetByIdAsync(productId);
+        var stock = await _stockRepository.GetByIdAsync(stockId);
 
         if (stock == null)
-            throw new Exception("Erro ao buscar produto ");
+            throw new Exception("Erro ao buscar stock por Id");
 
         stock.Total = StockMoney.CalculateTotal(stock.Product.UnitPrice, stock.Quantity).Amount;
         var stockDto = StockMapper.ToDto(stock);
@@ -46,6 +46,18 @@ public class StockService : IStockService
     
         StockMapper.ToUpdateEntity(stock,stockUpdateDto);
         await _stockRepository.UpdateQuantityAsync(stock);
+    }
+
+    public async Task<StockAvailableResponseDto> GetByProductIdAsync(Guid productId)
+    {
+        var stock = await _stockRepository.GetByProductIdAsync(productId);
+        
+        if (stock == null)
+            throw new Exception("Erro ao buscar stock por Id do produto ");
+        
+        var stockAvailableDto = StockMapper.ToAvailableDto(stock);
+
+        return stockAvailableDto;
     }
 
     public async Task AddAsync(StockCreateDTO stockCreateDto)

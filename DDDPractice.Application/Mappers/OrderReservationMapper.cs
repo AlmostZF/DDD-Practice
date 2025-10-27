@@ -8,11 +8,11 @@ namespace DDDPractice.Application.Mappers;
 
 public class OrderReservationMapper
 {
-    public static OrderReservationResponseDTO ToDto(OrderReservationEntity orderReservationEntity)
+    public static OrderReservationResponseDto ToDto(OrderReservationEntity orderReservationEntity)
     {
-        if (orderReservationEntity == null) return new OrderReservationResponseDTO();
+        if (orderReservationEntity == null) return new OrderReservationResponseDto();
         
-        return new OrderReservationResponseDTO
+        return new OrderReservationResponseDto
         {
             Id = orderReservationEntity.Id,
             OrderStatus = orderReservationEntity.OrderStatus,
@@ -33,13 +33,41 @@ public class OrderReservationMapper
 
     }
 
-    public static List<OrderReservationResponseDTO> ToDtoList(IEnumerable<OrderReservationEntity> orderReservationEntity)
+    public static List<OrderReservationResponseDto> ToDtoList(IEnumerable<OrderReservationEntity> orderReservationEntity)
     {
         return orderReservationEntity.Select(ToDto).ToList();
     }
 
+    public static OrderCalculateResponseDto ToCalculatedOrderDTO(ICollection<OrderReservationItemEntity> itensCollection, decimal fee, decimal totalValue)
+    {
+        if (itensCollection == null) return new OrderCalculateResponseDto();
+        
+        var orderCalculateResponse = new OrderCalculateResponseDto();
+        orderCalculateResponse.Fee = fee;
+        orderCalculateResponse.Total = totalValue;
 
-    public static OrderReservationEntity ToEntity(OrderReservationResponseDTO orderReservationResponseDto)
+        var listItens = itensCollection.Select(itemDto => new OrderReservationItemResponseDto()
+            {
+                ProductId = itemDto.ProductId,
+                Id = null,
+                Name = itemDto.Product.Name,
+                Quantity = itemDto.Quantity,
+                ReservationId = null,
+                SellerId = itemDto.SellerId,
+                SellerName = itemDto.Seller.Name,
+                TotalPrice = itemDto.TotalPrice,
+                UnitPrice = itemDto.UnitPrice,
+                Image = itemDto.Product.Image
+            })
+            .ToList();
+
+        orderCalculateResponse.ListOrderItens = listItens;
+        return orderCalculateResponse;
+
+    }
+
+
+    public static OrderReservationEntity ToEntity(OrderReservationResponseDto orderReservationResponseDto)
     {
         if (orderReservationResponseDto == null) return new OrderReservationEntity();
         
@@ -129,7 +157,7 @@ public class OrderReservationMapper
         return new OrderReservationEntity();
     }
     
-    public static List<OrderReservationEntity> ToEntitylist(List<OrderReservationResponseDTO> orderReservationDto)
+    public static List<OrderReservationEntity> ToEntitylist(List<OrderReservationResponseDto> orderReservationDto)
     {
         return orderReservationDto.Select(ToEntity).ToList();
     }

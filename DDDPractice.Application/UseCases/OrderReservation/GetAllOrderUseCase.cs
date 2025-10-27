@@ -14,16 +14,16 @@ public class GetAllOrderUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync()
+    public async Task<Result<List<OrderReservationResponseDto>>> ExecuteAsync()
     {
         try
         {
             var orderReservationDtos = await _orderReservationService.GetAllAsync();
-            return Result<List<OrderReservationResponseDTO>>.Success(orderReservationDtos,200);
+            return Result<List<OrderReservationResponseDto>>.Success(orderReservationDtos,200);
         }
         catch (Exception e)
         {
-            return Result<List<OrderReservationResponseDTO>>.Failure("Erro ao buscar lista de compra", 500);
+            return Result<List<OrderReservationResponseDto>>.Failure("Erro ao buscar lista de compra", 500);
         }
     }
 }

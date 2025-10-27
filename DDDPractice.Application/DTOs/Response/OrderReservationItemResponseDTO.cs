@@ -1,6 +1,6 @@
 namespace DDDPractice.Application.DTOs;
 
-public class OrderReservationItemResponseDTO
+public class OrderReservationItemResponseDto
 {
     public Guid? Id { get; set; }
     public Guid? ReservationId { get; set; }
@@ -8,8 +8,10 @@ public class OrderReservationItemResponseDTO
     public Guid SellerId { get; set; }
     public int Quantity { get; set; }
     
-    public string Name { get; set; }
-    public string SellerName { get; set; }
+    public string? Name { get; set; }
+
+    public string? Image { get; set; }
+    public string? SellerName { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }
     

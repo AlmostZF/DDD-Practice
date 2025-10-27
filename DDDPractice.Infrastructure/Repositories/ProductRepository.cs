@@ -1,7 +1,7 @@
 using DDD_Practice.DDDPractice.Domain.Entities;
 using DDD_Practice.DDDPractice.Domain.Repositories;
+using DDD_Practice.DDDPractice.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DDD_Practice.DDDPractice.Infrastructure.Repositories;
 
@@ -59,5 +59,38 @@ public class ProductRepository : IProductRepository
         return await _context.Product
             .Include(p=> p.Seller)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<ProductEntity>> FilterAsync(ProductFilter productFilter)
+    {
+
+        var query = ApplyFilters(productFilter);
+        return await query
+            .Include(p=>p.Seller)
+            .Skip((productFilter.PageNumber - 1) * productFilter.MaxItensPerPage)
+            .Take(productFilter.MaxItensPerPage)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountAsync(ProductFilter productFilter)
+    {
+        var query = ApplyFilters(productFilter);
+        return await query.CountAsync();
+    }
+
+    private IQueryable<ProductEntity> ApplyFilters(ProductFilter productFilter)
+    {
+        var query = _context.Product.AsQueryable();
+
+        if (!string.IsNullOrEmpty(productFilter.Name))
+            query = query.Where(p => p.Name.Contains(productFilter.Name));
+
+        if (!string.IsNullOrEmpty(productFilter.Seller))
+            query = query.Where(p => p.Seller.Name.Contains(productFilter.Seller));
+
+        if (productFilter.Category.HasValue)
+            query = query.Where(p => p.ProductType == productFilter.Category.Value);
+
+        return query;
     }
 }

@@ -14,17 +14,20 @@ public class StockController: ControllerBase
     private readonly UpdateQuantityUseCase _updateStockUseCase;
     private readonly GetAllStockUseCase _getAllStockUseCase;
     private readonly GetProductStockUseCase _getProductStockUseCase;
+    private readonly GetStockByProductIdUseCase _getStockByProductIdUseCase;
 
     public StockController(
         CreateStockUseCase createStockUseCase,
         UpdateQuantityUseCase updateStockUseCase,
         GetAllStockUseCase getAllStockUseCase,
-        GetProductStockUseCase getProductStockUseCase)
+        GetProductStockUseCase getProductStockUseCase,
+        GetStockByProductIdUseCase getStockByProductIdUseCase)
     {
         _createStockUseCase = createStockUseCase;
         _updateStockUseCase = updateStockUseCase;
         _getAllStockUseCase = getAllStockUseCase;
         _getProductStockUseCase = getProductStockUseCase;
+        _getStockByProductIdUseCase = getStockByProductIdUseCase;
     }
 
     [HttpGet]
@@ -42,6 +45,16 @@ public class StockController: ControllerBase
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var result = await _getProductStockUseCase.ExecuteAsync(id);
+
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+
+    }
+    [HttpGet("product/{id:guid}")]
+    public async Task<IActionResult> GetByProductId([FromRoute] Guid id)
+    {
+        var result = await _getStockByProductIdUseCase.ExecuteAsync(id);
 
         return result.Value != null
             ? Ok(result.Value)

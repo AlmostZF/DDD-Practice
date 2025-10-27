@@ -1,6 +1,6 @@
 namespace DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 
-public class UserUpdateDTO
+public class UserUpdateDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

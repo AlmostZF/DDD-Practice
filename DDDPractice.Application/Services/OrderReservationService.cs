@@ -28,20 +28,20 @@ public class OrderReservationService : IOrderReservationService
         _productRepository = productRepository;
     }
 
-    public async Task<List<OrderReservationResponseDTO>> GetBySecurityCodeAsync(string securityCode)
+    public async Task<List<OrderReservationResponseDto>> GetBySecurityCodeAsync(string securityCode)
     {
         var listOrder= await _orderReservationRepository.GetBySecurityCodeAsync(securityCode);
         return OrderReservationMapper.ToDtoList(listOrder);
     }
 
-    public async Task<OrderReservationResponseDTO> GetByIdAsync(Guid id)
+    public async Task<OrderReservationResponseDto> GetByIdAsync(Guid id)
     {
         var orderReservation = await CalculateTotalForOrderAsync(id);
         
         return OrderReservationMapper.ToDto(orderReservation);
     }
 
-    public async Task UpdateStatusAsync(OrderReservationResponseDTO orderReservationResponseDto)
+    public async Task UpdateStatusAsync(OrderReservationResponseDto orderReservationResponseDto)
     {
         var orderReservation = await _orderReservationRepository.GetByIdAsync(orderReservationResponseDto.Id);
         if (orderReservation == null)
@@ -86,18 +86,30 @@ public class OrderReservationService : IOrderReservationService
         await _orderReservationRepository.AddAsync(orderReservationEntity);
     }
 
-    public async Task<List<OrderReservationResponseDTO>> GetByStatusAsync(StatusOrder status)
+    public async Task<List<OrderReservationResponseDto>> GetByStatusAsync(StatusOrder status)
     {
         var orderReservationEntities = await _orderReservationRepository.GetByStatusAsync(status);
         return OrderReservationMapper.ToDtoList(orderReservationEntities);
     }
 
-    public async Task<List<OrderReservationResponseDTO>> GetAllAsync()
+    public async Task<List<OrderReservationResponseDto>> GetAllAsync()
     {
         var orderReservationEntities = await _orderReservationRepository.GetAllAsync();
         return OrderReservationMapper.ToDtoList(orderReservationEntities);
     }
-    
+
+    public async Task<OrderCalculateResponseDto> CalculateAsync(OrderCalculateDTO orderCalculateDTO)
+    {
+        var (itens, totalValue) = await CalculateOrderItemsAsync(orderCalculateDTO);
+        
+        var fee = _calculate.CalculateFeeCalculate(totalValue);
+        
+        var orderReservationEntity = OrderReservationMapper.ToCalculatedOrderDTO(itens, fee, totalValue);
+
+        return orderReservationEntity;
+
+    }
+
     private async Task<(List<OrderReservationItemEntity> items, decimal total)> BuildOrderItemsAsync(
         OrderReservationCreateDTO itemDtos)
     {
@@ -170,6 +182,37 @@ public class OrderReservationService : IOrderReservationService
                 Quantity = dto.Quantity,
                 UnitPrice = unitPrice,
                 TotalPrice = totalPrice
+            });
+        }
+        return (items, total);
+    }
+    
+    private async Task<(ICollection<OrderReservationItemEntity> items, decimal total)> CalculateOrderItemsAsync(
+        OrderCalculateDTO itemDtos)
+    {
+        var items = new List<OrderReservationItemEntity>();
+        var list = itemDtos.listOrderItens;
+        decimal total = 0;
+
+        foreach (var dto in list)
+        {
+            var product = await _productRepository.GetByIdAsync(dto.ProductId);
+            if (product == null)
+                throw new Exception($"Produto {dto.ProductId} não encontrado.");
+
+            var unitPrice = product.UnitPrice;
+            var totalPrice = unitPrice * dto.Quantity;
+            
+            total += totalPrice;
+            items.Add(new OrderReservationItemEntity
+            {
+                ProductId = dto.ProductId,
+                SellerId = dto.SellerId,
+                Quantity = dto.Quantity,
+                UnitPrice = unitPrice,
+                TotalPrice = totalPrice,
+                Product = product,
+                Seller = product.Seller
             });
         }
         return (items, total);

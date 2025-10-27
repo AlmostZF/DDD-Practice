@@ -2,7 +2,7 @@ using DDD_Practice.DDDPractice.Domain.Entities;
 
 namespace DDDPractice.Application.DTOs;
 
-public class StockResponseDTO
+public class StockResponseDto
 {
     public Guid Id { get; set; }
     public Guid ProductId { get; set; }
@@ -12,5 +12,5 @@ public class StockResponseDTO
     
     public DateTime? MovementDate { get; set; }
 
-    public ProductResponseDTO Product { get; set; }
+    public ProductResponseDto? Product { get; set; }
 }

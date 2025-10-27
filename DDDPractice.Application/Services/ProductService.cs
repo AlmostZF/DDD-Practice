@@ -3,6 +3,7 @@ using DDDPractice.Application.DTOs;
 using DDDPractice.Application.DTOs.Request.ProductCreateDTO;
 using DDDPractice.Application.Interfaces;
 using DDDPractice.Application.Mappers;
+using DDDPractice.Application.Shared;
 
 namespace DDDPractice.Application.Services;
 
@@ -16,7 +17,7 @@ public class ProductService: IProductService
         _productRepository = productRepository;
     }
 
-    public async Task<ProductResponseDTO> GetByIdAsync(Guid id)
+    public async Task<ProductResponseDto> GetByIdAsync(Guid id)
     {
         var productEntity = await _productRepository.GetByIdAsync(id);
         return ProductMapper.ToDto(productEntity);
@@ -46,9 +47,38 @@ public class ProductService: IProductService
         return productEntity.Id;
     }
 
-    public async Task<List<ProductResponseDTO>> GetAllAsync()
+    public async Task<List<ProductResponseDto>> GetAllAsync()
     {
         var productEntity = await _productRepository.GetAllAsync();
-         return ProductMapper.ToDtoList(productEntity);
+        return ProductMapper.ToDtoList(productEntity);
+    }
+
+    public async Task<PagedResponse<ProductResponseDto>> FilterAsync(ProductFilterDTO productFilterDto)
+    {
+        var filter = ProductMapper.toFilter(productFilterDto);
+        
+        var filteredProducts= await _productRepository.FilterAsync(filter);
+
+        var totalItems = await _productRepository.CountAsync(filter);
+        var toDtoList = ProductMapper.ToDtoList(filteredProducts);
+        
+        var itemsPerPage = productFilterDto.MaxItensPerPage ?? 10;
+        var totalPages = (int)Math.Ceiling(totalItems / (double)itemsPerPage);
+        
+        
+        var pagedResponse = new PagedResponse<ProductResponseDto>
+        {
+            Data = toDtoList,
+            Pagination = new Pagination
+            {
+                PageNumber = productFilterDto.PageNumber ?? 1,
+                ItemsPerPage = itemsPerPage,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            }
+        };
+
+        return pagedResponse;
+
     }
 }

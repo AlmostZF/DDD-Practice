@@ -14,20 +14,22 @@ public class ProductController: ControllerBase
     private readonly GetAllProductUseCase _getAllProductUseCase;
     private readonly GetProductUseCase _getProductUseCase;
     private readonly UpdateProductUseCase _updateProductUseCase;
+    private readonly FilterProductsUseCase _filterProductsUseCase;
 
     public ProductController(
         CreateProductUseCase createProductUseCase,
         DeleteProductUseCase deleteProductUseCase,
         GetAllProductUseCase getAllProductUseCase,
         GetProductUseCase getProductUseCase,
-        UpdateProductUseCase updateProductUseCase
-        )
+        UpdateProductUseCase updateProductUseCase,
+        FilterProductsUseCase filterProductsUseCase)
     {
         _createProductUseCase = createProductUseCase;
         _deleteProductUseCase = deleteProductUseCase;
         _getAllProductUseCase = getAllProductUseCase;
         _getProductUseCase = getProductUseCase;
         _updateProductUseCase = updateProductUseCase;
+        _filterProductsUseCase = filterProductsUseCase;
     }
 
     [HttpGet("{id:guid}")]
@@ -78,5 +80,16 @@ public class ProductController: ControllerBase
         return result.Message != null
             ? Ok(result.Message)
             : BadRequest(result.Error);
-    } 
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Filter([FromQuery] ProductFilterDTO productFilterDto)
+    {
+        var result = await _filterProductsUseCase.ExecuteAsync(productFilterDto);
+        
+        return result.Value != null
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+    
 }

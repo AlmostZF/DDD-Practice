@@ -15,6 +15,7 @@ public class OrderReservationController: ControllerBase
     private readonly CreateOrderUseCase _createOrderUseCase;
     private readonly DeleteOrderUseCase _deleteOrderUseCase;
     private readonly GetAllOrderUseCase _getAllOrderUseCase;
+    private readonly CalculateOrderUseCase _calculateOrderUseCase;
     private readonly GetOrderBySecurityCodeUseCase _getOrderBySecurityUseCase;
     private readonly GetOrderByStatusUseCase _getOrderByStatusUseCase;
     private readonly GetOrderUseCase _getOrderUseCase;
@@ -27,7 +28,8 @@ public class OrderReservationController: ControllerBase
         GetOrderBySecurityCodeUseCase getOrderBySecurityUseCase,
         GetOrderByStatusUseCase getOrderByStatusUseCase,
         GetOrderUseCase getOrderUseCase,
-        UpdateOrderUseCase updateOrderUseCase
+        UpdateOrderUseCase updateOrderUseCase,
+        CalculateOrderUseCase calculateOrderUseCase
         )
     {
         _createOrderUseCase = createOrderUseCase;
@@ -37,6 +39,7 @@ public class OrderReservationController: ControllerBase
         _getOrderByStatusUseCase = getOrderByStatusUseCase;
         _getOrderUseCase = getOrderUseCase;
         _updateOrderUseCase = updateOrderUseCase;
+        _calculateOrderUseCase = calculateOrderUseCase;
     }
 
     [HttpGet("{id:guid}")]
@@ -49,7 +52,7 @@ public class OrderReservationController: ControllerBase
                 : BadRequest(result.Error);
     }
     
-    [HttpGet()]
+    [HttpGet]
     public async Task<IActionResult> GetAll()
     {
 
@@ -95,6 +98,15 @@ public class OrderReservationController: ControllerBase
         var result = await _createOrderUseCase.ExecuteAsync(orderReservationCreateDto);
         return result.Message != null
             ? Ok(result.Message)
+            : BadRequest(result.Error);
+    }
+    
+    [HttpPost("pending")]
+    public async Task<IActionResult> Calculate([FromBody]OrderCalculateDTO orderCalculateDto)
+    {
+        var result = await _calculateOrderUseCase.ExecuteAsync(orderCalculateDto);
+        return result.Value != null
+            ? Ok(result.Value)
             : BadRequest(result.Error);
     }
     

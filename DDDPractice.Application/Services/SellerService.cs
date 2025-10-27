@@ -15,7 +15,7 @@ public class SellerService : ISellerService
         _sellerRepository = sellerRepository;
     }
 
-    public async Task<SellerResponseDTO> GetByIdAsync(Guid id)
+    public async Task<SellerResponseDto> GetByIdAsync(Guid id)
     {
         var sellerEntity = await _sellerRepository.GetByIdAsync(id);
         return SellerMapper.ToDto(sellerEntity);
@@ -43,7 +43,7 @@ public class SellerService : ISellerService
         await _sellerRepository.DeleteAsync(id);
     }
 
-    public async Task<List<SellerResponseDTO>> GetAllAsync()
+    public async Task<List<SellerResponseDto>> GetAllAsync()
     {
         var sellerList = await _sellerRepository.GetAllAsync();
         return SellerMapper.ToDtoList(sellerList);

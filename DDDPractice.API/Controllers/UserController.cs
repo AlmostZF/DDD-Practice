@@ -51,7 +51,7 @@ public class UserController: ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDTO userUpdateDto)
+    public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
     {
         var result = await _updateUserUseCase.ExecuteAsync(userUpdateDto);
 

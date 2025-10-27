@@ -13,16 +13,16 @@ public class GetProductStockUseCase
         _stockService = stockService;
     }
     
-    public async Task<Result<StockResponseDTO>> ExecuteAsync(Guid productId)
+    public async Task<Result<StockResponseDto>> ExecuteAsync(Guid productId)
     {
         try
         {
             var stockDto = await _stockService.GetByIdAsync(productId);
-            return Result<StockResponseDTO>.Success(stockDto, 200);
+            return Result<StockResponseDto>.Success(stockDto, 200);
         }
         catch (Exception e)
         {
-            return Result<StockResponseDTO>.Failure("Erro ao buscar estoque", 500);
+            return Result<StockResponseDto>.Failure("Erro ao buscar estoque", 500);
         }
         
     }

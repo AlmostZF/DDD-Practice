@@ -60,6 +60,18 @@ namespace DDDPractice.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("ConservationDays")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LargeDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -70,8 +82,19 @@ namespace DDDPractice.Infrastructure.Migrations
                     b.Property<Guid>("SellerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Weight")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("vish")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

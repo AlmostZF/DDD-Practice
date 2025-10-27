@@ -25,7 +25,7 @@ public class UserService: IUserService
         return user.Id;
     }
     
-    public async Task<UserResponseDTO> GetByIdAsync(Guid id)
+    public async Task<UserResponseDto> GetByIdAsync(Guid id)
     {
         var user = await _userRepository.GetByIdAsync(id);
 
@@ -34,7 +34,7 @@ public class UserService: IUserService
             return null;
         }
         
-        return new UserResponseDTO(user.SecurityCode)
+        return new UserResponseDto(user.SecurityCode)
         {
             Id = user.Id,
             Name = user.Name,
@@ -42,14 +42,14 @@ public class UserService: IUserService
         };
     }
 
-    public async Task<List<UserResponseDTO>> GetAllAsync()
+    public async Task<List<UserResponseDto>> GetAllAsync()
     {
         var listUser = await _userRepository.GetAllAsync();
         return UserMapper.ToDtoList(listUser);
     }
     
 
-    public async Task UpdateAsync(UserUpdateDTO userUpdateDTO)
+    public async Task UpdateAsync(UserUpdateDto userUpdateDTO)
     {
         var existingUser = await _userRepository.GetByIdAsync(userUpdateDTO.Id);
         if (existingUser == null)

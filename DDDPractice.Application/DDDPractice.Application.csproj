@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Interface\" />
-    <Folder Include="UseCases\OrderReservarionItem\" />
   </ItemGroup>
 
   <PropertyGroup>

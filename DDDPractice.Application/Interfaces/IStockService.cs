@@ -6,8 +6,9 @@ namespace DDDPractice.Application.Interfaces;
 
 public interface IStockService
 {
-    Task<List<StockResponseDTO>> GetAllAsync();
-    Task<StockResponseDTO> GetByIdAsync(Guid productId);
+    Task<List<StockResponseDto>> GetAllAsync();
+    Task<StockResponseDto> GetByIdAsync(Guid productId);
+    Task<StockAvailableResponseDto> GetByProductIdAsync(Guid productId);
     Task UpdateQuantityAsync(StockUpdateDTO stockUpdateDto);
     Task AddAsync(StockCreateDTO stockCreateDTO);
 

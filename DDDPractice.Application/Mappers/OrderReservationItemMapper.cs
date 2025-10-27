@@ -6,11 +6,11 @@ namespace DDDPractice.Application.Mappers;
 
 public static class OrderReservationItemMapper
 {
-    public static OrderReservationItemResponseDTO ToDto(OrderReservationItemEntity orderReservationItemEntity)
+    public static OrderReservationItemResponseDto ToDto(OrderReservationItemEntity orderReservationItemEntity)
     {
-        if (orderReservationItemEntity == null) return new OrderReservationItemResponseDTO();
+        if (orderReservationItemEntity == null) return new OrderReservationItemResponseDto();
         
-        return new OrderReservationItemResponseDTO
+        return new OrderReservationItemResponseDto
         {
             Id = Guid.NewGuid(),
             Quantity = orderReservationItemEntity.Quantity,
@@ -20,20 +20,21 @@ public static class OrderReservationItemMapper
             TotalPrice = orderReservationItemEntity.TotalPrice,
             UnitPrice = orderReservationItemEntity.UnitPrice,
             Name = orderReservationItemEntity.Product.Name,
-            SellerName = orderReservationItemEntity.Seller.Name
+            SellerName = orderReservationItemEntity.Seller.Name,
+            Image = orderReservationItemEntity.Product.Image
             // Product = ProductMapper.ToDto(orderReservationItemEntity.Product),
             // Seller = SellerMapper.ToDto(orderReservationItemEntity.Seller)
         };
 
     }
 
-    public static List<OrderReservationItemResponseDTO> ToDtoList(IEnumerable<OrderReservationItemEntity> orderReservationItemEntity)
+    public static List<OrderReservationItemResponseDto> ToDtoList(IEnumerable<OrderReservationItemEntity> orderReservationItemEntity)
     {
         return orderReservationItemEntity.Select(ToDto).ToList();
     }
 
 
-    public static OrderReservationItemEntity ToEntity(OrderReservationItemResponseDTO orderReservationResponseDto)
+    public static OrderReservationItemEntity ToEntity(OrderReservationItemResponseDto orderReservationResponseDto)
     {
         if (orderReservationResponseDto == null) return new OrderReservationItemEntity();
         
@@ -53,7 +54,7 @@ public static class OrderReservationItemMapper
     {
         return orderReservationDto.ToList();
     }
-    public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemResponseDTO> orderReservationDto)
+    public static List<OrderReservationItemEntity> ToEntitylist(List<OrderReservationItemResponseDto> orderReservationDto)
     {
         return orderReservationDto.Select(ToEntity).ToList();
     }

@@ -6,9 +6,9 @@ namespace DDDPractice.Application.Interfaces;
 
 public interface IUserService
 {
-    Task<UserResponseDTO> GetByIdAsync(Guid id);
-    Task<List<UserResponseDTO>> GetAllAsync(); 
+    Task<UserResponseDto> GetByIdAsync(Guid id);
+    Task<List<UserResponseDto>> GetAllAsync(); 
     Task<Guid> CreateAsync(UserCreateDTO userCreateDto);
-    Task UpdateAsync(UserUpdateDTO userUpdateDTO);
+    Task UpdateAsync(UserUpdateDto userUpdateDTO);
     Task DeleteAsync(Guid id);
 }

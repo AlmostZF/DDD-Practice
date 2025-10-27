@@ -15,16 +15,16 @@ public class GetOrderBySecurityCodeUseCase
         _orderReservationService = orderReservationService;
     }
 
-    public async Task<Result<List<OrderReservationResponseDTO>>> ExecuteAsync(string securityCode)
+    public async Task<Result<List<OrderReservationResponseDto>>> ExecuteAsync(string securityCode)
     {
         try
         {
             var orderReservationDtos = await _orderReservationService.GetBySecurityCodeAsync(securityCode);
-            return Result<List<OrderReservationResponseDTO>>.Success(orderReservationDtos,200);
+            return Result<List<OrderReservationResponseDto>>.Success(orderReservationDtos,200);
         }
         catch (Exception e)
         {
-            return Result<List<OrderReservationResponseDTO>>.Failure("Erro ao buscar lista de compra", 500);
+            return Result<List<OrderReservationResponseDto>>.Failure("Erro ao buscar lista de compra", 500);
         }
     }
 }

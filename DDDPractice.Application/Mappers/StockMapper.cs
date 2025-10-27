@@ -7,11 +7,11 @@ namespace DDDPractice.Application.Mappers;
 
 public class StockMapper
 {
-    public static StockResponseDTO ToDto(StockEntity stockEntity)
+    public static StockResponseDto ToDto(StockEntity stockEntity)
     {
-        if (stockEntity == null) return new StockResponseDTO();
+        if (stockEntity == null) return new StockResponseDto();
 
-        return new StockResponseDTO
+        return new StockResponseDto
         {
             Id = stockEntity.Id,
             Product = ProductMapper.ToDto(stockEntity.Product),
@@ -22,14 +22,25 @@ public class StockMapper
         };
 
     }
+    public static StockAvailableResponseDto ToAvailableDto(StockEntity stockEntity)
+    {
+        if (stockEntity == null) return new StockAvailableResponseDto();
 
-    public static List<StockResponseDTO> ToDtoList(IEnumerable<StockEntity> stockEntity)
+        return new StockAvailableResponseDto
+        {
+            Product = ProductMapper.ToDto(stockEntity.Product),
+            StockLimit = stockEntity.Quantity,
+        };
+
+    }
+
+    public static List<StockResponseDto> ToDtoList(IEnumerable<StockEntity> stockEntity)
     {
         return stockEntity.Select(ToDto).ToList();
     }
 
 
-    public static StockEntity ToEntity(StockResponseDTO stockResponseDto)
+    public static StockEntity ToEntity(StockResponseDto stockResponseDto)
     {
         if (stockResponseDto == null) return new StockEntity();
         
@@ -70,7 +81,7 @@ public class StockMapper
 
     }
     
-    public static List<StockEntity> ToEntitylist(List<StockResponseDTO> stockDto)
+    public static List<StockEntity> ToEntitylist(List<StockResponseDto> stockDto)
     {
         return stockDto.Select(ToEntity).ToList();
     }

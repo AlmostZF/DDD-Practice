@@ -3,20 +3,20 @@ using DDD_Practice.DDDPractice.Domain.ValueObjects;
 
 namespace DDDPractice.Application.DTOs;
 
-public class OrderReservationResponseDTO
+public class OrderReservationResponseDto
 {
     public Guid Id { get; set; }
 
     public DateTime? ReservationDate { get; set; }
     public DateTime PickupDate { get; set; }
     public DateTime PickupDeadline { get; set; }
-    public PickupLocation PickupLocation { get; set; }
+    public PickupLocation? PickupLocation { get; set; }
     public decimal ReservationFee { get; set; }
     public StatusOrder OrderStatus { get; set; }
     public decimal ValueTotal { get; set; }
     
-    public IEnumerable<OrderReservationItemResponseDTO> listOrderItens { get; set; }
+    public IEnumerable<OrderReservationItemResponseDto> listOrderItens { get; set; }
 
-    public UserResponseDTO UserResponse { get; set; }
+    public UserResponseDto UserResponse { get; set; }
 
 }

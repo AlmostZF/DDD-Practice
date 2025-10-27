@@ -7,11 +7,11 @@ namespace DDDPractice.Application.Mappers;
 
 public static class UserMapper
 {
-    public static UserResponseDTO ToDto(UserEntity userEntity)
+    public static UserResponseDto ToDto(UserEntity userEntity)
     {
-        if (userEntity == null) return new UserResponseDTO(null);
+        if (userEntity == null) return new UserResponseDto(null!);
         
-        return new UserResponseDTO(userEntity.SecurityCode)
+        return new UserResponseDto(userEntity.SecurityCode)
         {
             Id = userEntity.Id,
             Name = userEntity.Name,
@@ -22,13 +22,13 @@ public static class UserMapper
 
 
 
-    public static List<UserResponseDTO> ToDtoList(IEnumerable<UserEntity> userEntity)
+    public static List<UserResponseDto> ToDtoList(IEnumerable<UserEntity> userEntity)
     {
         return userEntity.Select(ToDto).ToList();
     }
 
 
-    public static UserEntity ToEntity(UserResponseDTO userResponseDto)
+    public static UserEntity ToEntity(UserResponseDto userResponseDto)
     {
         var securityCode = new SecurityCode(GenerateUniqueCodeFromGuid());
         if (userResponseDto == null) return new UserEntity(null);
@@ -40,7 +40,7 @@ public static class UserMapper
             PhoneNumber = userResponseDto.PhoneNumber
         }; 
     }
-    public static void ToUpdateEntity(UserEntity userEntity, UserUpdateDTO userUpdateDto)
+    public static void ToUpdateEntity(UserEntity userEntity, UserUpdateDto userUpdateDto)
     {
         if (userUpdateDto == null) return;
 
@@ -64,7 +64,7 @@ public static class UserMapper
         }; 
     }
     
-    public static List<UserEntity> ToEntitylist(List<UserResponseDTO> userDto)
+    public static List<UserEntity> ToEntitylist(List<UserResponseDto> userDto)
     {
         return userDto.Select(ToEntity).ToList();
     }

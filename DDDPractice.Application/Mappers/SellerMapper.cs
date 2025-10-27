@@ -6,11 +6,11 @@ namespace DDDPractice.Application.Mappers;
 
 public class SellerMapper
 {
-    public static SellerResponseDTO ToDto(SellerEntity sellerEntity)
+    public static SellerResponseDto ToDto(SellerEntity sellerEntity)
     {
-        if (sellerEntity == null) return new SellerResponseDTO();
+        if (sellerEntity == null) return new SellerResponseDto();
         
-        return new SellerResponseDTO()
+        return new SellerResponseDto()
         {
             Id = sellerEntity.Id,
             Name = sellerEntity.Name ,
@@ -20,13 +20,13 @@ public class SellerMapper
 
     }
 
-    public static List<SellerResponseDTO> ToDtoList(IEnumerable<SellerEntity> sellerEntity)
+    public static List<SellerResponseDto> ToDtoList(IEnumerable<SellerEntity> sellerEntity)
     {
         return sellerEntity.Select(ToDto).ToList();
     }
 
 
-    public static SellerEntity ToEntity(SellerResponseDTO sellerResponseDto)
+    public static SellerEntity ToEntity(SellerResponseDto sellerResponseDto)
     {
         if (sellerResponseDto == null) return new SellerEntity(null);
         
@@ -57,7 +57,7 @@ public class SellerMapper
     }
     
 
-    public static List<SellerEntity> ToEntitylist(List<SellerResponseDTO> sellerDto)
+    public static List<SellerEntity> ToEntitylist(List<SellerResponseDto> sellerDto)
     {
         return sellerDto.Select(ToEntity).ToList();
     }

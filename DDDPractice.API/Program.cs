@@ -55,6 +55,7 @@ builder.Services.AddScoped<CreateStockUseCase>();
 builder.Services.AddScoped<UpdateQuantityUseCase>();
 builder.Services.AddScoped<GetAllStockUseCase>();
 builder.Services.AddScoped<GetProductStockUseCase>();
+builder.Services.AddScoped<GetStockByProductIdUseCase>();
 
 builder.Services.AddScoped<DeleteSellerUseCase>();
 builder.Services.AddScoped<CreateSellerUseCase>();
@@ -67,6 +68,7 @@ builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<GetAllProductUseCase>();
 builder.Services.AddScoped<GetProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
+builder.Services.AddScoped<FilterProductsUseCase>();
 
 builder.Services.AddScoped<CreateOrderUseCase>();
 builder.Services.AddScoped<DeleteOrderUseCase>();
@@ -75,6 +77,7 @@ builder.Services.AddScoped<GetOrderBySecurityCodeUseCase>();
 builder.Services.AddScoped<GetOrderByStatusUseCase>();
 builder.Services.AddScoped<GetOrderUseCase>();
 builder.Services.AddScoped<UpdateOrderUseCase>();
+builder.Services.AddScoped<CalculateOrderUseCase>();
 
 
 builder.Services.AddControllers();
@@ -102,3 +105,4 @@ app.UseCors("AllowSpecificOrigin");
 
 app.Run();
 
+// dotnet ef migrations add InitialCreate --project DDDPractice.Infrastructure --startup-project DDDPractice.API

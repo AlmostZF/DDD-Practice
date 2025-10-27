@@ -15,7 +15,7 @@ public class UpdateUserUseCase
         _userService = userService;
     }
 
-    public async Task<Result> ExecuteAsync(UserUpdateDTO userUpdateDTO)
+    public async Task<Result> ExecuteAsync(UserUpdateDto userUpdateDTO)
     {
         try
         {
